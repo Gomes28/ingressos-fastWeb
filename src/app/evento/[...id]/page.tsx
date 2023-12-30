@@ -38,11 +38,11 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
             <Header />
             <div className="flex-1 flex flex-col">
                 <div className="h-[400px] relative overflow-hidden mb-12">
-                    <Image src={event?.image} alt="" fill />
+                    {event?.image && <Image src={event.image} alt="" fill />}
                     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-3xl"></div>
                     <div className="absolute top-0 left-0 right-0 bottom-0">
                         <div className="w-full max-w-8xl mx-auto h-full flex items-center justify-center">
-                            <img src={event?.image} alt="" className="h-full" />
+                            {event?.image && <img src={event.image} alt="" className="h-full" />}
                         </div>
                     </div>
                 </div>
