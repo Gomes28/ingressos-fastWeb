@@ -16,13 +16,13 @@ export function Header() {
                             <input
                                 type="text"
                                 placeholder="Buscar eventos, shows, espetáculos, cursos..."
-                                className="w-full outline-none"
+                                className="w-full outline-none overflow-hidden text-ellipsis"
                             />
                         </div>
                     </div>
                     <div className='flex gap-4 items-center'>
-                        <Link href={'/'} className='text-primary font-semibold'>Acesse sua conta</Link>
-                        <Link href={'/'} className='px-8 bg-primary h-12 rounded-md text-white font-semibold flex items-center'>Cadastre-se</Link>
+                        <Link href={'/entrar'} className='text-primary font-semibold'>Acesse sua conta</Link>
+                        <Link href={'/criar-conta'} className='px-8 bg-primary h-12 rounded-md text-white font-semibold flex items-center'>Cadastre-se</Link>
                     </div>
                 </div>
             </nav>

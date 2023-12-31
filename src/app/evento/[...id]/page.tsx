@@ -138,7 +138,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
                         }
                         )}
                     </div>
-                    <div className="border rounded-md mt-12">
+                    <div className="border rounded-md mt-6">
                         <div className="grid grid-cols-12 px-3 py-3 gap-4 border-b text-sm">
                             <div className="col-span-9 flex items-center">
                                 <span className="text-gray-5">Subtotal R$ 345,00</span>
