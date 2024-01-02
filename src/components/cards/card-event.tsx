@@ -19,10 +19,10 @@ export function CardEvent({ name, image, address, date, id }: Props) {
             </div>
             <div className="flex flex-col gap-2 px-3">
                 <div className="flex gap-2 items-center text-sm text-primary font-semibold">{date.map((item, index) => (
-                    <>
-                        <span key={item}>{item}</span>
+                    <div className="flex gap-2" key={item}>
+                        <span>{item}</span>
                         {index < date.length - 1 && <span><FiChevronRight /></span>}
-                    </>
+                    </div>
                 ))}</div>
                 <h4 className="text-lg font-medium line-clamp-2">{name}</h4>
                 <span className="text-sm text-gray-7">{address}</span>
