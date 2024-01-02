@@ -2,10 +2,12 @@
 
 import { maskPrice } from "@/helpers/mask";
 import { payments } from "@/utils/payments";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiLock } from "react-icons/fi";
+import slugify from "slugify";
 
-interface Ticket {
+export interface Ticket {
     id: number,
     name: string,
     description: string,
@@ -16,12 +18,12 @@ interface Ticket {
     max_per_purchase: number
 };
 
-interface SelectedTickets {
+export interface SelectedTickets {
     ticket: Ticket;
     quantity: number;
 }
 
-export function TicketsTable({tickets}: {tickets: Ticket[]}) {
+export function TicketsTable({tickets, event}: {tickets: Ticket[], event}) {
     const [selectedTickets, setSelectedTickets] = useState<SelectedTickets[]>([]);
     const [total, setTotal] = useState(0);
 
@@ -49,11 +51,12 @@ export function TicketsTable({tickets}: {tickets: Ticket[]}) {
         selectedTickets.forEach(item => {
             total = total + item.quantity * (item.ticket.price + item.ticket.service_charge);
         })
+        console.log(selectedTickets);
         setTotal(total);
     }, [selectedTickets]);
 
     return (
-        <div id="tickets" className="w-full max-w-8xl mx-auto flex flex-col my-12">
+        <div id="tickets" className="w-full max-w-8xl mx-auto flex flex-col py-12">
             <h2 className="text-2xl font-bold text-gray-3 mb-6">Ingressos</h2>
             <div className="border rounded-md">
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 border-b text-sm">
@@ -132,7 +135,7 @@ export function TicketsTable({tickets}: {tickets: Ticket[]}) {
                         <span className="text-lg font-semibold"></span>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <button className="h-12 px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
+                        <Link href={`/evento/checkout/${slugify(event.name, {lower: true})}/${event.id}`} className="h-12 px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</Link>
                     </div>
                 </div>
             </div>

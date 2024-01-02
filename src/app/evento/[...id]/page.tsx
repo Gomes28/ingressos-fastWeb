@@ -47,7 +47,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
                         </div>
                     </div>
                 </div>
-                <div className="w-full max-w-8xl mx-auto flex flex-col mb-12">
+                <div className="w-full max-w-8xl mx-auto flex flex-col">
                     <h2 className="text-2xl font-bold text-gray-3">{event?.name}</h2>
                     <div className="flex gap-4 mt-4">
                         <span className="flex mt-1 text-gray-4">
@@ -85,7 +85,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
                         <button className="text-base font-semibold text-primary border border-primary px-6 h-10 rounded-md hover:shadow-md transition-all" onClick={() => setShow(!show)}>{show ? 'Ver menos' : 'Ver mais'}</button>
                     </div>
                 </div>
-                <TicketsTable tickets={event.tickets} />
+                <TicketsTable tickets={event.tickets} event={event} />
             </div>
             <Footer />
         </main>
