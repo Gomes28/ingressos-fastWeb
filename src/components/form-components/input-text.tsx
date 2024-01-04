@@ -28,7 +28,7 @@ export function InputText({ title, disabled, error, id, onBlur, onChange, placeh
                     `}
                     value={value}
                     onChange={onChange}
-                    onBlur={onBlur}
+                    onBlur={onBlur} 
                     disabled={disabled}
                     type={currentType}
                     placeholder={placeholder ?? ''}

@@ -6,7 +6,9 @@ import { events } from "@/utils/events";
 import { useEffect, useState } from "react";
 import { useParticipant, useParticipantProps } from "@/hooks/useParticipant";
 import { FiClock, FiMapPin, FiShoppingCart } from "react-icons/fi";
-import { maskPrice } from "@/helpers/mask";
+import { maskCpf, maskPrice } from "@/helpers/mask";
+import { ButtonPrimary } from "@/components/buttons/button-primary";
+import { Clock } from "@/components/clock";
 
 const ticketsData = [
     {
@@ -20,7 +22,7 @@ const ticketsData = [
             "available_quantity": 100,
             "max_per_purchase": 8
         },
-        "quantity": "3"
+        "quantity": "1"
     },
     {
         "ticket": {
@@ -54,15 +56,39 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
     const event = events.find(item => item.id == +params.id[params.id.length - 1]);
     const [participants, setParticipants] = useState<useParticipantProps[]>([]);
     const participant = useParticipant();
+    const [names, setNames] = useState<Array<string>>([]);
+    const [surnames, setSurnames] = useState<Array<string>>([]);
+    const [emails, setEmails] = useState<Array<string>>([]);
+    const [cpfs, setCpfs] = useState<Array<string>>([]);
+    const [birthDates, setBirthDates] = useState<Array<string>>([]);
     const [tickets, setTickets] = useState([]);
+    const [total, setTotal] = useState(0);
 
     const hydrate = () => {
         const newParticipants = [];
+        const names = [];
+        const emails = [];
+        const surnames = [];
+        const cpfs = [];
+        const birthDates = [];
+
         ticketsData.forEach(item => {
             for (let i = 0; i < +item.quantity; i++) {
-                newParticipants.push(participant);
+                const newParticipant = participant;
+                newParticipants.push(newParticipant);
+                names.push('');
+                surnames.push('');
+                emails.push('');
+                cpfs.push('');
+                birthDates.push('');
             }
         });
+
+        setNames(names);
+        setSurnames(surnames);
+        setEmails(emails);
+        setBirthDates(birthDates);
+        setCpfs(cpfs);
         setParticipants(newParticipants);
     }
 
@@ -75,6 +101,11 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
         });
         setTickets(tickets);
         hydrate();
+        let total = 0;
+        ticketsData.forEach(item => {
+            total = total + (+item.quantity) * (item.ticket.price + item.ticket.service_charge);
+        });
+        setTotal(total);
     }, []);
 
     return (
@@ -103,38 +134,104 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
                     <div className="mt-6 flex flex-col gap-6">
                         <strong className="font-semibold text-xl">Informação do participante</strong>
                         {participants.map((item, index) => (
-                            <div className="grid grid-cols-2 gap-6 border-b pb-6">
+                            <div className="grid grid-cols-2 gap-6 border p-6 bg-gray-50 rounded-md" key={index}>
                                 <div className="col-span-2">
-                                    <span className="font-medium text-gray-7">Ingresso n° {index + 1}: <strong className="text-gray-3">{tickets[index].name}</strong></span>
+                                    <span className="font-medium text-gray-3">Ingresso n° {index + 1}: <strong className="text-primary">{tickets[index].name}</strong></span>
                                 </div>
-                                <InputText title="Nome" placeholder="Insira o nome do participante" />
-                                <InputText title="Sobrenome" placeholder="Insira o sobrenome do participante" />
-                                <InputText title="Email" placeholder="Insira o email do participante" />
-                                <InputText title="CPF" placeholder="Insira o CPF do participante" />
-                                <InputText title="Data de nascimento" type="date" />
+                                <InputText
+                                    title="Nome completo"
+                                    placeholder="Insira o nome do participante"
+                                    value={names[index]}
+                                    onChange={(e) => {
+                                        const values = [...names];
+                                        values[index] = e.target.value;
+                                        setNames(values);
+                                    }}
+                                />
+                                <InputText
+                                    title="Email"
+                                    placeholder="Insira o email do participante"
+                                    value={emails[index]}
+                                    onChange={(e) => {
+                                        const values = [...emails];
+                                        values[index] = e.target.value;
+                                        setEmails(values);
+                                    }}
+                                />
+                                <InputText
+                                    title="CPF"
+                                    placeholder="Insira o CPF do participante"
+                                    value={cpfs[index]}
+                                    onChange={(e) => {
+                                        const values = [...cpfs];
+                                        values[index] = maskCpf(e.target.value);
+                                        setCpfs(values);
+                                    }}
+                                />
+                                <InputText
+                                    title="Data de nascimento"
+                                    type="date"
+                                    value={birthDates[index]}
+                                    onChange={(e) => {
+                                        const values = [...birthDates];
+                                        values[index] = e.target.value;
+                                        setBirthDates(values);
+                                    }}
+                                />
                             </div>
                         ))}
+                        <div className="border border-primary rounded-md overflow-hidden">
+                            <div className="bg-gray-100 px-4 py-3">
+                                <div className="flex flex-col">
+                                    <span className="font-semibold text-base">Dados do cartão</span>
+                                    <span className="text-sm text-primary">Parcele em até 12x</span>
+                                </div>
+                            </div>
+                            <div className="p-4">
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div className="col-span-2 flex">
+                                        <InputText title="Nome impresso no cartão" />
+                                    </div>
+                                    <div className="col-span-2 flex">
+                                        <InputText title="Número do cartão" />
+                                    </div>
+                                    <div className="col-span-1 flex">
+                                        <InputText title="Data de validade" placeholder="00/00" />
+                                    </div>
+                                    <div className="col-span-1 flex">
+                                        <InputText title="Código de segurança" placeholder="000" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-6">
+                        <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
+                        <ButtonPrimary title="Continuar" />
                     </div>
                 </div>
                 <div className="col-span-4 relative">
-                    <div className="sticky top-24 w-full border rounded-md">
-                        <div className="h-12 w-full bg-secondary text-white font-semibold rounded-t-md flex items-center justify-between px-3">
-                            <span>Resumo</span>
-                            <div className="flex items-center gap-3">
-                                <FiShoppingCart size={24} />
-                                <span>R$ 1.400,00</span>
-                            </div>
-                        </div>
-                        {ticketsData.map(item => (
-                            <div className="flex justify-between items-center border-b gap-4 p-4">
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-sm font-semibold text-gray-3">{item.ticket.name}</span>
-                                    <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.price).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
-                                    <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
+                    <div className="sticky top-24 w-full">
+                        <div className="w-full border rounded-md">
+                            <div className="h-12 w-full bg-secondary text-white font-semibold rounded-t-md flex items-center justify-between px-3">
+                                <span>Resumo</span>
+                                <div className="flex items-center gap-3">
+                                    <FiShoppingCart size={24} />
+                                    <span>R$ {maskPrice(total.toString())}</span>
                                 </div>
-                                <span>{item.quantity}</span>
                             </div>
-                        ))}
+                            {ticketsData.map((item, index) => (
+                                <div className="flex justify-between items-center border-b gap-4 p-4" key={index}>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold text-gray-3">{item.ticket.name}</span>
+                                        <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.price).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
+                                        <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
+                                    </div>
+                                    <span>{item.quantity}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <Clock />
                     </div>
                 </div>
             </section>

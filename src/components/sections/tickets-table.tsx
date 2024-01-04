@@ -50,8 +50,7 @@ export function TicketsTable({tickets, event}: {tickets: Ticket[], event}) {
         let total = 0;
         selectedTickets.forEach(item => {
             total = total + item.quantity * (item.ticket.price + item.ticket.service_charge);
-        })
-        console.log(selectedTickets);
+        });
         setTotal(total);
     }, [selectedTickets]);
 
