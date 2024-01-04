@@ -194,4 +194,43 @@ export const events = [
             },
         ]
     },
+    {
+        id: 6,
+        name: 'Aluguel de acessórios - São Paulo',
+        address: 'Shopping Interlagos - São Paulo, SP',
+        image: '/events/3.webp',
+        date: ['27 JAN', '28 JAN'],
+        tickets: [
+            {
+                id: 1,
+                name: 'Área Vip - 1° Lote',
+                description: 'Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.',
+                service_charge: 1800,
+                available_until: new Date(),
+                price: 10350,
+                available_quantity: 100,
+                max_per_purchase: 8
+            },
+            {
+                id: 2,
+                name: 'Área Vip - 2° Lote',
+                description: 'Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.',
+                service_charge: 1800,
+                available_until: new Date(),
+                price: 13250,
+                available_quantity: 100,
+                max_per_purchase: 8
+            },
+            {
+                id: 3,
+                name: 'Área Vip - 3° Lote',
+                description: 'Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.',
+                service_charge: 1800,
+                available_until: new Date(),
+                price: 20350,
+                available_quantity: 100,
+                max_per_purchase: 8
+            },
+        ]
+    },
 ]

@@ -1,14 +1,8 @@
 'use client'
 
-import { FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import Link from 'next/link';
-import { categories } from '@/utils/categories';
 import 'swiper/css';
+import 'swiper/css/pagination';
 import { events } from '@/utils/events';
-import { CardEvent } from '@/components/cards/card-event';
-import { CardEventLarge } from '@/components/cards/card-event-large';
 import { Header } from '@/components/header';
 import { CategoriesHome } from '@/components/sections/categories-home';
 import { EventsSwiper } from '@/components/sections/events-swiper';
