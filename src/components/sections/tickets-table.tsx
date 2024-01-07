@@ -111,7 +111,7 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
                 }
                 )}
             </div>
-            <div className="border rounded-md">
+            <div className="border rounded-md md:hidden">
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 border-b text-sm">
                     <div className="col-span-9">
                         <span>Ingressos</span>
@@ -178,7 +178,7 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
                     </div>
                 </div>
             </div>
-            <div className="border rounded-md mt-6">
+            <div className="border rounded-md mt-6 md:hidden">
                 <div className="flex flex-col px-3 py-3 gap-4 border-b text-sm">
                     <div className="col-span-9 flex items-center">
                         <span className="text-gray-5">Subtotal R$ {maskPrice(total.toString())}</span>
