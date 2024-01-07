@@ -15,14 +15,14 @@ export default function Home() {
     <main className="flex flex-col lg:gap-16 gap-8">
       <Header />
       <div className='lg:hidden flex gap-3 px-3'>
-        <div className="flex flex-1 w-full px-3 h-12 border items-center rounded-md gap-3">
+        <div className="flex flex-1 w-full px-3 h-14 border items-center rounded-md gap-3">
           <input
             type="text"
             placeholder="Buscar eventos, shows, espetáculos, cursos..."
             className="w-full outline-none overflow-hidden text-ellipsis"
           />
         </div>
-        <button className='w-12 h-12 bg-primary text-white rounded-md flex items-center justify-center'><FiSearch size={20} /></button>
+        <button className='w-14 h-14 bg-primary text-white rounded-md flex items-center justify-center'><FiSearch size={20} /></button>
       </div>
       <CategoriesHome />
       <EventsSwiper title='Eventos mais vistos nas últimas 24h 👀' events={events} />
