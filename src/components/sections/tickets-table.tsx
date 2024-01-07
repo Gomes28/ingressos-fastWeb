@@ -55,7 +55,7 @@ export function TicketsTable({tickets, event}: {tickets: Ticket[], event}) {
     }, [selectedTickets]);
 
     return (
-        <div id="tickets" className="w-full max-w-8xl mx-auto flex flex-col py-12">
+        <div id="tickets" className="hidden w-full max-w-8xl mx-auto lg:flex flex-col py-12">
             <h2 className="text-2xl font-bold text-gray-3 mb-6">Ingressos</h2>
             <div className="border rounded-md">
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 border-b text-sm">
