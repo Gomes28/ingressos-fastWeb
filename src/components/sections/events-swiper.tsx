@@ -1,7 +1,11 @@
+'use client'
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { CardEvent } from "../cards/card-event";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useState } from "react";
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 export function EventsSwiper({ title, events }: { title: string, events: Array<any> }) {
     const [swiper, setSwiper] = useState(null);
