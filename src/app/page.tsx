@@ -11,7 +11,7 @@ import { Footer } from '@/components/footer';
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-16">
+    <main className="flex flex-col lg:gap-16 gap-8">
       <Header />
       <CategoriesHome />
       <EventsSwiper title='Eventos mais vistos nas últimas 24h 👀' events={events}/>

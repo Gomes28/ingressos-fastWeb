@@ -14,10 +14,10 @@ interface Props {
 export function CardEventLarge({ name, image, address, date, id }: Props) {
     return (
         <div className="flex gap-3">
-            <div className="w-1/2 h-[390px] overflow-hidden relative rounded-md">
+            <div className="w-full lg:w-1/2 h-[200px] lg:h-[390px] overflow-hidden relative rounded-md">
                 <Image src={image} alt={name} fill />
             </div>
-            <div className="flex-1 flex flex-col gap-2 p-3 justify-between">
+            <div className="hidden flex-1 lg:flex flex-col gap-2 p-3 justify-between">
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-2 items-center text-base text-primary font-semibold">
                         {

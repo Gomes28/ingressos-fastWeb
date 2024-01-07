@@ -48,3 +48,12 @@ body {
 .swiper-wrapper .swiper-slide:last-child {
   margin-right: 0 !important;
 }
+
+@media (max-width: 720px) {
+  .swiper {
+    padding: 0 16px !important;
+  }
+  .swiper-wrapper .swiper-slide {
+    margin-right: 16px !important;
+  }
+}
