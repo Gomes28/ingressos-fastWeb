@@ -5,7 +5,7 @@ import { FiMenu, FiSearch } from "react-icons/fi";
 export function Header() {
     return (
         <header className="h-20">
-            <nav className="w-full h-20 border-b-black/10 border-b fixed top-0 bg-white z-[999]">
+            <nav className="w-full h-20 border-b-black/10 lg:border-b max-md:shadow-md fixed top-0 bg-white z-[999]">
                 <div className='w-full h-full max-w-8xl mx-auto px-4 flex items-center justify-between'>
                     <div className="flex gap-6 flex-1">
                         <Link href={'/'} className="flex">
