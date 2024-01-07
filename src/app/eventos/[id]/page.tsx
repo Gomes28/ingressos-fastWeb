@@ -13,10 +13,10 @@ export default function EventsByCategoryPage({params}: {params: {id: string}}) {
     return (
         <main className="min-h-screen flex flex-col">
             <Header />
-            <div className="flex-1 flex flex-col gap-16">
+            <div className="flex-1 flex flex-col gap-8 lg:gap-16">
                 <div className="h-[300px] w-full relative">
                     <Image src={'/event-category.jpg'} alt="" fill className="object-cover"/>
-                    <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/80">
+                    <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/80 px-3">
                         <div className="text-white h-full flex flex-col justify-between w-full max-w-8xl mx-auto py-6">
                             <ul className="text-sm flex items-center gap-4">
                                 <li>
