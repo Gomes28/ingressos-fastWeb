@@ -38,7 +38,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
         <main className="min-h-screen flex flex-col">
             <Header />
             <div className="flex-1 flex flex-col">
-                <div className="h-[400px] relative overflow-hidden mb-12">
+                <div className="h-[208px] lg:h-[400px] relative overflow-hidden mb-6 lg:mb-12">
                     {event?.image && <Image src={event.image} alt="" fill />}
                     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-3xl"></div>
                     <div className="absolute top-0 left-0 right-0 bottom-0">
@@ -47,7 +47,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
                         </div>
                     </div>
                 </div>
-                <div className="w-full max-w-8xl mx-auto flex flex-col">
+                <div className="w-full max-w-8xl mx-auto max-md:px-3 flex flex-col">
                     <h2 className="text-2xl font-bold text-gray-3">{event?.name}</h2>
                     <div className="flex gap-4 mt-4">
                         <span className="flex mt-1 text-gray-4">
@@ -64,7 +64,7 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
                         </span>
                         <span className="text-base font-medium text-gray-3">{event?.address}</span>
                     </div>
-                    <div className="w-96 border rounded-md mt-6">
+                    <div className="w-96 max-w-full border rounded-md mt-6">
                         <div className="flex gap-4 p-4">
                             <span className="mt-1">
                                 <IoTicketOutline />
