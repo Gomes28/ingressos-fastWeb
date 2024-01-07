@@ -132,18 +132,16 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
                     return (
                         <div className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-9 flex flex-col">
-                                <div className="flex gap-4 items-center flex-wrap">
+                                <div className="flex gap-2 items-center flex-wrap mb-4">
                                     <h4 className="text-base font-medium text-gray-3">{ticket.name}</h4>
-                                    <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
                                     <span className="text-black/60 text-sm">Taxa de serviço R$ {maskPrice(ticket.service_charge.toString())}</span>
-                                    <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
                                     <span className="text-black/60 text-sm">Disponível até {day}/{month} às {date.getHours()}:{date.getMinutes()}</span>
                                 </div>
                                 <p className="text-xs">{ticket.description}</p>
                             </div>
                             <div className="col-span-3 flex items-center">
                                 <div className="h-12 w-20 px-3 rounded-md bg-white flex items-center border">
-                                    <select name="select" className="w-full outline-none h-full" onChange={e => selectQuantity(ticket, e.target.value)}>
+                                    <select name="select" className="w-full outline-none h-full bg-white" onChange={e => selectQuantity(ticket, e.target.value)}>
                                         {values.map(item => <option value={item}>{item}</option>)}
                                     </select>
                                 </div>
