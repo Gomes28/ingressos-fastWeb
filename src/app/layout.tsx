@@ -16,13 +16,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const res = cookies().get('user');
-  const user = res?.value && JSON.parse(res.value);
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header user={user} />
         {children}
       </body>
     </html>
