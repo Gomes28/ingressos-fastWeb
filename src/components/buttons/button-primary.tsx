@@ -17,10 +17,10 @@ export function ButtonPrimary({title, full, Icon, loading, ...options}: Props) {
             h-12 transition-colors rounded-md px-6 text-white font-medium text-base
             bg-primary hover:bg-primary-hover active:bg-primary-active
             flex items-center justify-center gap-2
-        `} {...options}>
+        `} disabled={loading} {...options}>
             {loading && <LoadingSvg color={'#fff'} show={loading}/>}
             {Icon && <span className="text-xl text-white"><Icon /></span>}
-            {title}
+            {!loading && title}
         </button>
     )
 }

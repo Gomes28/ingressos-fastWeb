@@ -28,7 +28,7 @@ export function UserWrapper({ user }: { user: IUser }) {
     return (
         <div className="relative" ref={ref}>
             <button className="flex gap-3 items-center cursor-pointer" onClick={() => setShow(!show)}>
-                <div className="w-12 h-12 border border-gray-300 rounded-full flex items-center justify-center font-semibold text-xl">{user.name.substring(0, 1)}</div>
+                <div className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center font-semibold text-xl">{user.name.substring(0, 1)}</div>
                 <span>{user.name}</span>
                 <FiChevronDown />
             </button>
