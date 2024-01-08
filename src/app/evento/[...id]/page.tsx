@@ -36,7 +36,6 @@ export default function EventPage({ params }: { params: { id: Array<string> } })
 
     return (
         <main className="min-h-screen flex flex-col">
-            <Header />
             <div className="flex-1 flex flex-col">
                 <div className="h-[208px] lg:h-[400px] relative overflow-hidden mb-6 lg:mb-12">
                     {event?.image && <Image src={event.image} alt="" fill />}

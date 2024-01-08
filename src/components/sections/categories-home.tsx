@@ -11,7 +11,7 @@ export function CategoriesHome() {
             </div>
             <div className='hidden lg:grid grid-cols-8 gap-6'>
                 {categories.map(item => (
-                    <Link key={item.id} href={`/eventos/${item.slug}`} className='flex flex-col border bg-gray-50 text-gray-3 px-3 py-4 items-center rounded-2xl gap-1 hover:shadow-md hover:bg-primary-light hover:border-primary hover:text-primary transition-all'>
+                    <Link key={item.id + '-1'} href={`/eventos/${item.slug}`} className='flex flex-col border bg-gray-50 text-gray-3 px-3 py-4 items-center rounded-2xl gap-1 hover:shadow-md hover:bg-primary-light hover:border-primary hover:text-primary transition-all'>
                         <Image src={item.icon} alt='' width={48} height={48} />
                         <span className='text-center font-medium'>{item.name}</span>
                     </Link>
@@ -20,8 +20,8 @@ export function CategoriesHome() {
             <div className="lg:hidden">
                 <Swiper slidesPerView={'auto'}>
                     {categories.map(item => (
-                        <SwiperSlide>
-                            <Link key={item.id} href={`/eventos/${item.slug}`} className='max-w-[141.5px] flex flex-col border bg-gray-50 text-gray-3 px-3 py-4 items-center rounded-2xl gap-1 hover:shadow-md hover:bg-primary-light hover:border-primary hover:text-primary transition-all'>
+                        <SwiperSlide key={item.id}>
+                            <Link href={`/eventos/${item.slug}`} className='max-w-[141.5px] flex flex-col border bg-gray-50 text-gray-3 px-3 py-4 items-center rounded-2xl gap-1 hover:shadow-md hover:bg-primary-light hover:border-primary hover:text-primary transition-all'>
                                 <Image src={item.icon} alt='' width={48} height={48} />
                                 <span className='text-center font-medium'>{item.name}</span>
                             </Link>

@@ -4,19 +4,36 @@ import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { ButtonSecondary } from "@/components/buttons/button-secondary";
 import { InputText } from "@/components/form-components/input-text";
 import { useForm } from "@/hooks/useForm";
+import { AuthService } from "@/services/auth.service";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { setCookies } from "./actions";
 
 export default function LoginPage() {
     const router = useRouter();
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const email = useForm();
     const password = useForm();
 
-    const handleSubmit = () => {
-
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const res = await AuthService.signin(email.value, password.value);
+            if(res) {
+                await setCookies('access_token', JSON.stringify(res.access_token));
+                await setCookies('user', JSON.stringify(res.user));
+                router.push('/');
+            } else {
+                setError(true);
+            }
+        } catch (error) {
+            setError(true);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -52,6 +69,7 @@ export default function LoginPage() {
                         title="Entrar"
                         full={true}
                         onClick={() => handleSubmit()}
+                        loading={loading}
                     />
                 </form>
                 <span>Ainda não tem acesso?</span>

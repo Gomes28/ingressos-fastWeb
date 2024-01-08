@@ -12,8 +12,7 @@ import { FiSearch } from 'react-icons/fi';
 
 export default function Home() {
   return (
-    <main className="flex flex-col lg:gap-16 gap-8">
-      <Header />
+    <main className="flex flex-col lg:gap-16 gap-8 mt-8">
       <div className='lg:hidden flex gap-3 px-3'>
         <div className="flex flex-1 w-full px-3 h-14 border items-center rounded-md gap-3">
           <input

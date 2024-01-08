@@ -12,7 +12,6 @@ export default function EventsByCategoryPage({params}: {params: {id: string}}) {
     
     return (
         <main className="min-h-screen flex flex-col">
-            <Header />
             <div className="flex-1 flex flex-col gap-8 lg:gap-16">
                 <div className="h-[300px] w-full relative">
                     <Image src={'/event-category.jpg'} alt="" fill className="object-cover"/>

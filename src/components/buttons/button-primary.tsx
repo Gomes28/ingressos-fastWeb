@@ -1,14 +1,16 @@
 'use client'
 
 import React from "react";
+import { LoadingSvg } from "../loading-svg";
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     title: string;
     Icon?: React.FC;
     full?: boolean;
+    loading?: boolean;
 }
 
-export function ButtonPrimary({title, full, Icon, ...options}: Props) {
+export function ButtonPrimary({title, full, Icon, loading, ...options}: Props) {
     return (
         <button className={`
             ${full ? 'w-full' : 'w-fit'}
@@ -16,6 +18,7 @@ export function ButtonPrimary({title, full, Icon, ...options}: Props) {
             bg-primary hover:bg-primary-hover active:bg-primary-active
             flex items-center justify-center gap-2
         `} {...options}>
+            {loading && <LoadingSvg color={'#fff'} show={loading}/>}
             {Icon && <span className="text-xl text-white"><Icon /></span>}
             {title}
         </button>

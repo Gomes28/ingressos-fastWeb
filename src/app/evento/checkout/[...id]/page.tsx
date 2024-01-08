@@ -110,7 +110,6 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
 
     return (
         <main className="min-h-screen flex flex-col">
-            <Header />
             <section className="w-full max-w-8xl mx-auto grid grid-cols-12 gap-6 py-12">
                 <div className="col-span-8">
                     <div className="flex flex-col border-b pb-6">

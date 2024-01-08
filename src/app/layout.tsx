@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { cookies } from 'next/headers'
+import { Header } from '@/components/header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,9 +16,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const res = cookies().get('user');
+  const user = res.value && JSON.parse(res.value);
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Header user={user} />
+        {children}
+      </body>
     </html>
   )
 }
