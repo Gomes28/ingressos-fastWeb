@@ -3,7 +3,9 @@
 import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { ButtonSecondary } from "@/components/buttons/button-secondary";
 import { InputText } from "@/components/form-components/input-text";
+import { maskNumber, maskToNumber } from "@/helpers/mask";
 import { useForm } from "@/hooks/useForm";
+import { AuthService } from "@/services/auth.service";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,13 +14,37 @@ import { useState } from "react";
 export default function CreateUserPage() {
     const router = useRouter();
     const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
     const name = useForm();
-    const phone = useForm();
+    const cpf = useForm('cpf');
+    const phone = useForm('phone');
     const email = useForm();
     const password = useForm();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        try {
+            {error && setError(false)}
+            {success && setSuccess(false)}
+            setLoading(true);
+            const res = await AuthService.signup({
+                cpf: maskToNumber(cpf.value),
+                email: email.value,
+                name: name.value,
+                telefone: maskToNumber(phone.value),
+                password: password.value
+            });
 
+            if(res) {
+                setSuccess(true);
+            } else {
+                setError(true);
+            }
+        } catch (error) {
+            setError(true);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -47,6 +73,13 @@ export default function CreateUserPage() {
                         {...phone}
                     />
                     <InputText
+                        id="cpf"
+                        title="CPF"
+                        type="text"
+                        placeholder="Insira o seu telefone"
+                        {...cpf}
+                    />
+                    <InputText
                         id="email"
                         title="Email"
                         type="email"
@@ -60,11 +93,13 @@ export default function CreateUserPage() {
                         placeholder="Insira a sua senha"
                         {...password}
                     />
-                    {error && <span className="px-3 h-12 flex items-center bg-red-100 text-red-500 font-medium rounded-md">Erro ao fazer login, tente novamente.</span>}
+                    {error && <span className="px-3 h-12 flex items-center bg-red-100 text-red-500 font-medium rounded-md">Erro ao cadastrar usuário, tente novamente.</span>}
+                    {success && <span className="px-3 h-12 flex items-center bg-green-100 text-green-500 font-medium rounded-md">Usuário cadastrado com sucesso.</span>}
                     <ButtonPrimary
-                        title="Entrar"
+                        title="Criar conta"
                         full={true}
                         onClick={() => handleSubmit()}
+                        loading={loading}
                     />
                 </form>
                 <span>Já tem uma conta?</span>

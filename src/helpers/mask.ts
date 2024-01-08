@@ -27,3 +27,5 @@ export const maskCnpj = (value: string) => VMasker.toPattern(value, "99.999.999/
 export const maskPrice = (value: string) => VMasker.toMoney(value);
 
 export const maskNumber = (value: string) => value?.toString().replace(/[^0-9.,]/g, '');
+
+export const maskToNumber = (value: string) => value?.toString().replace(/[^0-9]/g, '');

@@ -18,11 +18,14 @@ export class AuthService {
         }
     }
 
-    public static signup(user: IUser) {
+    public static async signup(user: IUser) {
         try {
+            const res = await api.post('user/signup', {nome: user.name, ...user}).then(res => res.data);
 
+            if(!res.user) return false;
+            return true;
         } catch (error) {
-
+            return false;   
         }
     }
 }

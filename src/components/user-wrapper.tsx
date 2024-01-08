@@ -13,6 +13,7 @@ export function UserWrapper({ user }: { user: IUser }) {
     const router = useRouter();
     const [show, setShow] = useState(false);
     const ref = useRef(null);
+    const name = user.name.split(' ', 2);
 
     const handleOutsideClick = (event: any) => {
         if (ref.current && !ref.current.contains(event.target)) {
@@ -39,7 +40,8 @@ export function UserWrapper({ user }: { user: IUser }) {
         <div className="relative" ref={ref}>
             <button className="flex gap-3 items-center cursor-pointer" onClick={() => setShow(!show)}>
                 <div className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center font-semibold text-xl">{user.name.substring(0, 1)}</div>
-                <span>{user.name}</span>
+                <span>{name[0] ?? ``} {name[1] ?? ``}</span>
+                
                 <FiChevronDown />
             </button>
             {show &&
