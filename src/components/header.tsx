@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiChevronDown, FiChevronUp, FiMenu, FiSearch } from "react-icons/fi";
 import { UserWrapper } from "./user-wrapper";
+import { Aside } from "./aside";
 
 export function Header({ user }: { user?: IUser }) {
     return (
@@ -23,14 +24,16 @@ export function Header({ user }: { user?: IUser }) {
                         </div>
                     </div>
                     {user ?
-                        <UserWrapper user={user} />
+                        <div className='hidden lg:flex gap-4 items-center'>
+                            <UserWrapper user={user} />
+                        </div>
                         :
                         <div className='hidden lg:flex gap-4 items-center'>
                             <Link href={'/entrar'} className='text-primary font-semibold'>Acesse sua conta</Link>
                             <Link href={'/criar-conta'} className='px-8 bg-primary h-12 rounded-md text-white font-semibold flex items-center'>Cadastre-se</Link>
                         </div>
                     }
-                    <button className="flex lg:hidden"><FiMenu size={24} /></button>
+                    <Aside user={user}/>
                 </div>
             </nav>
         </header>

@@ -38,7 +38,7 @@ export default function LoginPage() {
 
     return (
         <main className="w-screen h-screen flex items-center justify-center flex-col gap-6">
-            <div className="w-full max-w-md flex items-center flex-col gap-6">
+            <div className="w-full max-w-md flex items-center flex-col gap-6 max-lg:px-3">
                 <div className="flex flex-col items-center">
                     <Link href={'/'} className="flex">
                         <Image src={'/logo.svg'} alt="" width={218} height={24} />
