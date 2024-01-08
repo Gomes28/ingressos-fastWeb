@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: 'http://hottickets.com.br/'
+    baseURL: 'https://hottickets.com.br/'
 });
