@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import './globals.css'
 import { cookies } from 'next/headers'
 import { Header } from '@/components/header'
 
