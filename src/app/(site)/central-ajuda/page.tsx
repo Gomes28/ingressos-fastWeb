@@ -53,7 +53,7 @@ export default function HelpCenter() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col gap-4 w-full max-w-8xl mx-auto pb-6">
+            <div className="flex flex-col gap-4 w-full max-w-8xl mx-auto pb-6 max-lg:px-3">
                 {faq.map((item, index) => (
                     <Accordion title={item.pergunta} key={index}>
                         <p>{item.resposta}</p>
