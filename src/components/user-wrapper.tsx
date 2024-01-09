@@ -57,7 +57,7 @@ export function UserWrapper({ user }: { user: IUser }) {
                             <Link href={'/minha-conta'} className="h-10 flex items-center gap-4 hover:bg-slate-100 transition-all bg-white px-3 rounded-md text-sm"><FiUser size={20}/>Minha conta</Link>
                         </li>
                         <li>
-                            <Link href={''} className="h-10 flex items-center gap-4 hover:bg-slate-100 transition-all bg-white px-3 rounded-md text-sm"><FiInfo size={20}/>Central de ajuda</Link>
+                            <Link href={'/central-ajuda'} className="h-10 flex items-center gap-4 hover:bg-slate-100 transition-all bg-white px-3 rounded-md text-sm"><FiInfo size={20}/>Central de ajuda</Link>
                         </li>
                         <li>
                             <button onClick={() => handleLogout()} className="h-10 w-full flex items-center gap-4 hover:bg-slate-100 transition-all bg-white px-3 rounded-md text-sm"><FiLogOut size={20}/>Sair</button>
