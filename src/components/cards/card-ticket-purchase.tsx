@@ -36,11 +36,11 @@ export function CardTicketPurchase({ event }: { event: IEvent }) {
                         <span className="text-xs font-light text-gray-4">27 a 28 de Janeiro</span>
                     </div>
                 </div>
-                <div className="flex gap-4 mt-4">
-                    <span className="flex mt-1 text-gray-4">
+                <div className="flex items-center gap-4 mt-4">
+                    <span className="flex text-secondary">
                         <FiMapPin />
                     </span>
-                    <span className="text-sm font-medium text-gray-3 line-clamp-1">{event?.address}</span>
+                    <span className="text-sm font-medium text-secondary line-clamp-1">{event?.address}</span>
                 </div>
             </div>
             <div className="flex flex-col gap-3 p-3 text-primary font-medium">
