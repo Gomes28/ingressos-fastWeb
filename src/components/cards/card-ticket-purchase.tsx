@@ -1,10 +1,23 @@
 import Image from "next/image";
 import { IEvent } from "./card-event";
-import { FiClock, FiFileText, FiMail, FiMapPin, FiUsers } from "react-icons/fi";
+import { FiClock, FiFileText, FiMail, FiMapPin, FiX } from "react-icons/fi";
 import { LuPrinter } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { ticketsData } from "@/app/(site)/evento/checkout/[...id]/page";
+import { maskPrice } from "@/helpers/mask";
 
 
 export function CardTicketPurchase({ event }: { event: IEvent }) {
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if(show) {
+            document.body.style.overflowY = 'hidden';
+        } else {
+            document.body.style.overflowY = 'auto';
+        }
+    }, [show]);
+
     return (
         <div className="flex flex-col shadow-lg rounded-md">
             <div className="w-full h-[148px] overflow-hidden relative rounded-t-md">
@@ -33,7 +46,66 @@ export function CardTicketPurchase({ event }: { event: IEvent }) {
             <div className="flex flex-col gap-3 p-3 text-primary font-medium">
                 <button className="flex items-center gap-4 hover:text-primary-hover"><LuPrinter />Baixar ingresso</button>
                 <button className="flex items-center gap-4 hover:text-primary-hover"><FiMail />Fale com o produtor</button>
-                <button className="flex items-center gap-4 hover:text-primary-hover"><FiFileText />Ver pedido</button>
+                <button className="flex items-center gap-4 hover:text-primary-hover" onClick={() => setShow(true)}><FiFileText />Ver pedido</button>
+            </div>
+            {show && <Modal close={() => setShow(false)} />}
+        </div>
+    )
+}
+
+function Modal({ close }) {
+    const [tickets, setTickets] = useState([]);
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        const tickets = []
+        ticketsData.map(item => {
+            for (let i = 0; i < +item.quantity; i++) {
+                tickets.push(item.ticket);
+            }
+        });
+        setTickets(tickets);
+        let total = 0;
+        ticketsData.forEach(item => {
+            total = total + (+item.quantity) * (item.ticket.price + item.ticket.service_charge);
+        });
+        setTotal(total);
+    }, []);
+
+    return (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black/50 z-[9999]">
+            <div className="w-full max-w-screen-lg h-[80vh] bg-white rounded-lg p-4 relative overflow-y-auto">
+                <button onClick={close} className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md absolute top-2 right-2"><FiX size={24} /></button>
+                <h2 className="text-xl font-semibold mt-8">Pedido nº 1G8VD4BQ9VQ</h2>
+                <div className="flex gap-4 items-center justify-between w-full mt-8">
+                    <div className="flex flex-col">
+                        <span className="text-xs">Enviado às 09h54 de 26/05/2022 a:</span>
+                        <h4 className="mt-4 text-lg font-medium">Ezequiel Pires</h4>
+                        <span className="text-sm font-light">ezequiel.pires08000@gmail.com</span>
+                    </div>
+                    <div className="flex flex-col gap-2 items-center w-64 border-2 py-4 rounded-md bg-primary-light border-primary">
+                        <span className="text-sm">Nº DO PEDIDO:</span>
+                        <span className="text-xl font-medium">1G8VD4BQ9VQ</span>
+                        <strong className="text-primary-hover">Confirmado</strong>
+                        <span className="text-lg">R$ {maskPrice(total.toString())}</span>
+                    </div>
+                </div>
+                <h2 className="text-xl font-semibold mt-8">Ingressos comprados neste pedido</h2>
+                <div className="border border-black/30 rounded-md mt-4 p-6">
+                    {tickets.map((item, index) => (
+                        <div key={index} className={`flex justify-between items-center ${index < tickets.length - 1 && 'border-b'} gap-4 p-4`}>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-sm font-semibold text-gray-3">Ezequiel Pires</span>
+                                <span className="text-sm font-medium text-gray-500">ezequiel.pires@gmail.com</span>
+                                <span className="text-sm font-semibold text-gray-3">{item.name}</span>
+                                <span className="text-sm font-medium text-gray-500">R$ {maskPrice((item.price).toString())} (+ R$ {maskPrice((item.service_charge).toString())} taxa)</span>
+                                <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
+                            </div>
+                            <button className="flex items-center gap-4 text-primary hover:text-primary-hover font-medium"><LuPrinter />Baixar ingresso</button>
+                        </div>
+                    ))}
+                </div>
+                <span></span>
             </div>
         </div>
     )

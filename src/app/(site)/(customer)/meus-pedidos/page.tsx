@@ -37,7 +37,7 @@ export default function MyRequestsPage() {
             </div>
             <div className="w-full max-w-8xl mx-auto max-lg:px-3 pb-6 grid lg:grid-cols-4 gap-6">
                 {events.map(item => (
-                    <CardTicketPurchase event={item} />
+                    <CardTicketPurchase key={item.id} event={item} />
                 ))}
             </div>
         </div>

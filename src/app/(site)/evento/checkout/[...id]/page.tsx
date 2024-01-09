@@ -10,7 +10,7 @@ import { maskCpf, maskPrice } from "@/helpers/mask";
 import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { Clock } from "@/components/clock";
 
-const ticketsData = [
+export const ticketsData = [
     {
         "ticket": {
             "id": 1,
