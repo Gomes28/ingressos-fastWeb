@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
 import slugify from "slugify";
 
-interface Props {
+export interface IEvent {
     id: number | string;
     name: string;
     image: string;
@@ -11,7 +11,7 @@ interface Props {
     date: Array<string>;
 }
 
-export function CardEvent({ name, image, address, date, id }: Props) {
+export function CardEvent({ name, image, address, date, id }: IEvent) {
     return (
         <Link href={`/evento/${slugify(name, {lower: true})}/${id}`} className="flex flex-col gap-3 w-[307px]">
             <div className="w-full h-[148px] overflow-hidden relative rounded-md">

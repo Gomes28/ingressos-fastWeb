@@ -1,5 +1,8 @@
 'use client'
 
+import { CardEvent } from "@/components/cards/card-event";
+import { CardTicketPurchase } from "@/components/cards/card-ticket-purchase";
+import { events } from "@/utils/events";
 import Link from "next/link";
 import { useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
@@ -31,6 +34,11 @@ export default function MyRequestsPage() {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="w-full max-w-8xl mx-auto max-lg:px-3 pb-6 grid lg:grid-cols-4 gap-6">
+                {events.map(item => (
+                    <CardTicketPurchase event={item} />
+                ))}
             </div>
         </div>
     )
