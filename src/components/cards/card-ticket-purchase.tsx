@@ -127,7 +127,7 @@ function Modal({ close }) {
 
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black/50 z-[9999]">
-            <div className="w-full max-w-screen-lg max-lg:h-screen h-[80vh] bg-white lg:rounded-lg p-4 relative overflow-y-auto flex flex-col max-lg:items-center" ref={ref}>
+            <div className="w-full max-w-screen-lg max-lg:h-full h-[80vh] bg-white lg:rounded-lg p-4 relative overflow-y-auto flex flex-col max-lg:items-center" ref={ref}>
                 <button onClick={close} className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md absolute top-2 right-2"><FiX size={24} /></button>
                 <h2 className="text-xl font-semibold mt-8">Pedido nº 1G8VD4BQ9VQ</h2>
                 <div className="flex gap-4 max-lg:flex-col items-center justify-between w-full mt-8">
