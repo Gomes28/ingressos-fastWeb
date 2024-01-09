@@ -3,9 +3,49 @@ import { IEvent } from "./card-event";
 import { FiClock, FiFileText, FiMail, FiMapPin, FiX } from "react-icons/fi";
 import { LuPrinter } from "react-icons/lu";
 import { useEffect, useRef, useState } from "react";
-import { ticketsData } from "@/app/(site)/evento/checkout/[...id]/page";
 import { maskPrice } from "@/helpers/mask";
 
+const ticketsData = [
+    {
+        "ticket": {
+            "id": 1,
+            "name": "Área Vip - 1° Lote",
+            "description": "Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.",
+            "service_charge": 1800,
+            "available_until": "2024-01-02T16:13:58.860Z",
+            "price": 10350,
+            "available_quantity": 100,
+            "max_per_purchase": 8
+        },
+        "quantity": "1"
+    },
+    {
+        "ticket": {
+            "id": 2,
+            "name": "Área Vip - 2° Lote",
+            "description": "Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.",
+            "service_charge": 1800,
+            "available_until": "2024-01-02T16:13:58.860Z",
+            "price": 13250,
+            "available_quantity": 100,
+            "max_per_purchase": 8
+        },
+        "quantity": "2"
+    },
+    {
+        "ticket": {
+            "id": 3,
+            "name": "Área Vip - 3° Lote",
+            "description": "Piso térreo localizado na quadra,  em pé em frente ao palco, com mesas bistrô espalhadas pelo espaço.",
+            "service_charge": 1800,
+            "available_until": "2024-01-02T16:13:58.860Z",
+            "price": 20350,
+            "available_quantity": 100,
+            "max_per_purchase": 8
+        },
+        "quantity": "1"
+    }
+]
 
 export function CardTicketPurchase({ event }: { event: IEvent }) {
     const [show, setShow] = useState(false);
