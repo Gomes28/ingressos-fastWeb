@@ -1,7 +1,7 @@
 import { IUser } from "@/models/user.model";
 import Image from "next/image";
 import Link from "next/link";
-import { FiChevronDown, FiChevronUp, FiMenu, FiSearch } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import { UserWrapper } from "./user-wrapper";
 import { Aside } from "./aside";
 

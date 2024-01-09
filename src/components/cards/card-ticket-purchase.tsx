@@ -2,7 +2,7 @@ import Image from "next/image";
 import { IEvent } from "./card-event";
 import { FiClock, FiFileText, FiMail, FiMapPin, FiX } from "react-icons/fi";
 import { LuPrinter } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ticketsData } from "@/app/(site)/evento/checkout/[...id]/page";
 import { maskPrice } from "@/helpers/mask";
 
@@ -54,8 +54,15 @@ export function CardTicketPurchase({ event }: { event: IEvent }) {
 }
 
 function Modal({ close }) {
+    const ref = useRef(null);
     const [tickets, setTickets] = useState([]);
     const [total, setTotal] = useState(0);
+
+    const handleOutsideClick = (event: any) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            close();
+        }
+    };
 
     useEffect(() => {
         const tickets = []
@@ -70,11 +77,17 @@ function Modal({ close }) {
             total = total + (+item.quantity) * (item.ticket.price + item.ticket.service_charge);
         });
         setTotal(total);
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
     }, []);
 
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black/50 z-[9999]">
-            <div className="w-full max-w-screen-lg h-[80vh] bg-white rounded-lg p-4 relative overflow-y-auto">
+            <div className="w-full max-w-screen-lg h-[80vh] bg-white rounded-lg p-4 relative overflow-y-auto" ref={ref}>
                 <button onClick={close} className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md absolute top-2 right-2"><FiX size={24} /></button>
                 <h2 className="text-xl font-semibold mt-8">Pedido nº 1G8VD4BQ9VQ</h2>
                 <div className="flex gap-4 items-center justify-between w-full mt-8">
@@ -91,7 +104,7 @@ function Modal({ close }) {
                     </div>
                 </div>
                 <h2 className="text-xl font-semibold mt-8">Ingressos comprados neste pedido</h2>
-                <div className="border border-black/30 rounded-md mt-4 p-6">
+                <div className="border border-black/20 rounded-md mt-4 p-6">
                     {tickets.map((item, index) => (
                         <div key={index} className={`flex justify-between items-center ${index < tickets.length - 1 && 'border-b'} gap-4 p-4`}>
                             <div className="flex flex-col gap-1">
