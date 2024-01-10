@@ -110,8 +110,8 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
 
     return (
         <main className="min-h-screen flex flex-col">
-            <section className="w-full max-w-8xl mx-auto grid grid-cols-12 gap-6 py-12">
-                <div className="col-span-8">
+            <section className="w-full max-w-8xl mx-auto max-lg:px-3 grid grid-cols-12 gap-6 py-12">
+                <div className="col-span-12 lg:col-span-8">
                     <div className="flex flex-col border-b pb-6">
                         <h2 className="text-2xl font-bold text-gray-3">{event?.name}</h2>
                         <div className="flex gap-4 mt-4">
@@ -129,11 +129,14 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
                             </span>
                             <span className="text-base font-medium text-gray-3">{event?.address}</span>
                         </div>
+                        <div className="flex lg:hidden mt-8">
+                            <AsideCheckout total={total} />
+                        </div>
                     </div>
                     <div className="mt-6 flex flex-col gap-6">
                         <strong className="font-semibold text-xl">Informação do participante</strong>
                         {participants.map((item, index) => (
-                            <div className="grid grid-cols-2 gap-6 border p-6 bg-gray-50 rounded-md" key={index}>
+                            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 border p-6 bg-gray-50 rounded-md" key={index}>
                                 <div className="col-span-2">
                                     <span className="font-medium text-gray-3">Ingresso n° {index + 1}: <strong className="text-primary">{tickets[index].name}</strong></span>
                                 </div>
@@ -187,7 +190,7 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
                                 </div>
                             </div>
                             <div className="p-4">
-                                <div className="grid grid-cols-4 gap-4">
+                                <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4">
                                     <div className="col-span-2 flex">
                                         <InputText title="Nome impresso no cartão" />
                                     </div>
@@ -204,36 +207,44 @@ export default function CheckoutPage({ params }: { params: { id: Array<string> }
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center mt-6">
+                    <div className="flex max-lg:flex-col justify-between lg:items-center mt-6 gap-4">
                         <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
-                        <ButtonPrimary title="Continuar" />
+                        <div className="w-fit max-lg:w-full">
+                            <ButtonPrimary title="Continuar" full={true} />
+                        </div>
                     </div>
                 </div>
-                <div className="col-span-4 relative">
-                    <div className="sticky top-24 w-full">
-                        <div className="w-full border rounded-md">
-                            <div className="h-12 w-full bg-secondary text-white font-semibold rounded-t-md flex items-center justify-between px-3">
-                                <span>Resumo</span>
-                                <div className="flex items-center gap-3">
-                                    <FiShoppingCart size={24} />
-                                    <span>R$ {maskPrice(total.toString())}</span>
-                                </div>
-                            </div>
-                            {ticketsData.map((item, index) => (
-                                <div className="flex justify-between items-center border-b gap-4 p-4" key={index}>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-sm font-semibold text-gray-3">{item.ticket.name}</span>
-                                        <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.price).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
-                                        <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
-                                    </div>
-                                    <span>{item.quantity}</span>
-                                </div>
-                            ))}
-                        </div>
-                        <Clock />
-                    </div>
+                <div className="hidden lg:flex h-full col-span-4 relative">
+                    <AsideCheckout total={total} />
                 </div>
             </section>
         </main>
+    )
+}
+
+function AsideCheckout({ total }) {
+    return (
+        <div className="sticky top-24 w-full">
+            <div className="w-full border rounded-md">
+                <div className="h-12 w-full bg-secondary text-white font-semibold rounded-t-md flex items-center justify-between px-3">
+                    <span>Resumo</span>
+                    <div className="flex items-center gap-3">
+                        <FiShoppingCart size={24} />
+                        <span>R$ {maskPrice(total.toString())}</span>
+                    </div>
+                </div>
+                {ticketsData.map((item, index) => (
+                    <div className="flex justify-between items-center border-b gap-4 p-4" key={index}>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm font-semibold text-gray-3">{item.ticket.name}</span>
+                            <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.price).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
+                            <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
+                        </div>
+                        <span>{item.quantity}</span>
+                    </div>
+                ))}
+            </div>
+            <Clock />
+        </div>
     )
 }

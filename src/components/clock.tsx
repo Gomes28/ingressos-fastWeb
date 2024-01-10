@@ -39,7 +39,7 @@ export function Clock() {
                 <span className="w-20 text-lg font-semibold">{tempoRestante.minutos < 10 ? '0' : ''}{tempoRestante.minutos}:{tempoRestante.segundos < 10 ? '0' : ''}{tempoRestante.segundos}</span>
             </div>
             <div className="flex-1 flex justify-end">
-                <p className="text-sm">Após este tempo, os ingressos serão liberados para venda novamente.</p>
+                <p className="text-xs">Após este tempo, os ingressos serão liberados para venda novamente.</p>
             </div>
         </div>
     );
