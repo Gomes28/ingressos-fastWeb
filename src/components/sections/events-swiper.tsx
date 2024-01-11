@@ -4,10 +4,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { CardEvent } from "../cards/card-event";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useState } from "react";
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { IParty } from "@/models/party.model";
 
-export function EventsSwiper({ title, events }: { title: string, events: Array<any> }) {
+export function EventsSwiper({ title, events }: { title: string, events: Array<IParty> }) {
     const [swiper, setSwiper] = useState(null);
     const [start, setStart] = useState(true);
     const [end, setEnd] = useState(false);

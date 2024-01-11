@@ -1,11 +1,14 @@
+'use client'
+
 import { events } from "@/utils/events";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from 'swiper/modules';
 import { CardEventLarge } from "../cards/card-event-large";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useState } from "react";
+import { IParty } from "@/models/party.model";
 
-export function FeaturedEvents() {
+export function FeaturedEvents({events}: {events: Array<IParty>}) {
     const [swiper, setSwiper] = useState(null);
     const [start, setStart] = useState(true);
     const [end, setEnd] = useState(false);
