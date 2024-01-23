@@ -1,6 +1,7 @@
 'use client'
 
 import { maskPrice } from "@/helpers/mask";
+import { ITicket } from "@/models/party.model";
 import { payments } from "@/utils/payments";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,11 +20,11 @@ export interface Ticket {
 };
 
 export interface SelectedTickets {
-    ticket: Ticket;
+    ticket: ITicket;
     quantity: number;
 }
 
-export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
+export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) {
     const [selectedTickets, setSelectedTickets] = useState<SelectedTickets[]>([]);
     const [total, setTotal] = useState(0);
 
@@ -49,7 +50,7 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
     useEffect(() => {
         let total = 0;
         selectedTickets.forEach(item => {
-            total = total + item.quantity * (item.ticket.price + item.ticket.service_charge);
+            total = total + item.quantity * (item.ticket.value + 0);
         });
         setTotal(total);
     }, [selectedTickets]);
@@ -73,33 +74,34 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
                     </div>
                 </div>
                 {tickets.map((ticket, index) => {
-                    const date = new Date(ticket.available_until);
+                    const date = new Date(ticket.buy_Initial);
                     const [day, month, year] = date.toLocaleDateString().split('/');
                     const values = [];
                     const selected = selectedTickets.find(item => item.ticket.id == ticket.id);
-                    const total = selected ? (selected.quantity * (ticket.price + ticket.service_charge)).toString() : '000';
-                    for (let i = 0; i <= ticket.max_per_purchase; i++) {
+                    const total = selected ? (selected.quantity * (ticket.value + 0)).toString() : '000';
+                    for (let i = 0; i <= 8; i++) {
                         values.push(i);
                     }
                     return (
                         <div className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-7 flex flex-col">
                                 <div className="flex gap-4 items-center">
-                                    <h4 className="text-base font-medium text-gray-3">{ticket.name}</h4>
+                                    <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
                                     <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
-                                    <span className="text-black/60 text-sm">Taxa de serviço R$ {maskPrice(ticket.service_charge.toString())}</span>
+                                    <span className="text-black/60 text-sm">Taxa de serviço R$ 0,00</span>
                                     <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
                                     <span className="text-black/60 text-sm">Disponível até {day}/{month} às {date.getHours()}:{date.getMinutes()}</span>
                                 </div>
-                                <p className="text-xs">{ticket.description}</p>
+                                <p className="text-xs">Uma pequena descrição</p>
+                                {/* <p className="text-xs">{ticket.description}</p> */}
                             </div>
                             <div className="col-span-1 flex items-center">
-                                <span>R$ {maskPrice(ticket.price.toString())}</span>
+                                <span>R$ {maskPrice(ticket.value.toString())}</span>
                             </div>
                             <div className="col-span-2 flex items-center">
                                 <div className="h-12 w-20 px-3 rounded-md bg-white flex items-center border">
                                     <select name="select" className="w-full outline-none h-full" onChange={e => selectQuantity(ticket, e.target.value)}>
-                                        {values.map(item => <option value={item}>{item}</option>)}
+                                        {values.map(item => <option value={item} key={item}>{item}</option>)}
                                     </select>
                                 </div>
                             </div>
@@ -121,28 +123,29 @@ export function TicketsTable({ tickets, event }: { tickets: Ticket[], event }) {
                     </div>
                 </div>
                 {tickets.map((ticket, index) => {
-                    const date = new Date(ticket.available_until);
+                    const date = new Date(ticket.buy_Final);
                     const [day, month, year] = date.toLocaleDateString().split('/');
                     const values = [];
                     const selected = selectedTickets.find(item => item.ticket.id == ticket.id);
-                    const total = selected ? (selected.quantity * (ticket.price + ticket.service_charge)).toString() : '000';
-                    for (let i = 0; i <= ticket.max_per_purchase; i++) {
+                    const total = selected ? (selected.quantity * (ticket.value + 0)).toString() : '000';
+                    for (let i = 0; i <= 8; i++) {
                         values.push(i);
                     }
                     return (
                         <div className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-9 flex flex-col">
                                 <div className="flex gap-2 items-center flex-wrap mb-4">
-                                    <h4 className="text-base font-medium text-gray-3">{ticket.name}</h4>
-                                    <span className="text-black/60 text-sm">Taxa de serviço R$ {maskPrice(ticket.service_charge.toString())}</span>
+                                    <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
+                                    <span className="text-black/60 text-sm">Taxa de serviço R$ {0}</span>
                                     <span className="text-black/60 text-sm">Disponível até {day}/{month} às {date.getHours()}:{date.getMinutes()}</span>
                                 </div>
-                                <p className="text-xs">{ticket.description}</p>
+                                <p className="text-xs">Uma pequena descrição</p>
+                                {/* <p className="text-xs">{ticket.description}</p> */}
                             </div>
                             <div className="col-span-3 flex items-center">
                                 <div className="h-12 w-20 px-3 rounded-md bg-white flex items-center border">
                                     <select name="select" className="w-full outline-none h-full bg-white" onChange={e => selectQuantity(ticket, e.target.value)}>
-                                        {values.map(item => <option value={item}>{item}</option>)}
+                                        {values.map(item => <option value={item} key={item}>{item}</option>)}
                                     </select>
                                 </div>
                             </div>

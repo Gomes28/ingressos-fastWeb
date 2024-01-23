@@ -1,6 +1,5 @@
 import { Footer } from "@/components/footer";
 import { TicketsTable } from "@/components/sections/tickets-table";
-import { events } from "@/utils/events";
 import Image from "next/image";
 import { FiClock, FiMapPin } from "react-icons/fi";
 import { IoTicketOutline } from "react-icons/io5";
@@ -39,7 +38,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
                         <span className="flex mt-1 text-gray-4">
                             <FiMapPin />
                         </span>
-                        <span className="text-base font-medium text-gray-3">{event.address.name} - {event.address.city}, {event.address.state}</span>
+                        <span className="text-base font-medium text-gray-3">{event.address.name}, {event.address.street} - {event.address.city}, {event.address.state}</span>
                     </div>
                     <div className="w-96 max-w-full border rounded-md mt-6">
                         <div className="flex gap-4 p-4">
@@ -55,7 +54,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
                     </div>
                     <ContentEvent content={event.description} />
                 </div>
-                <TicketsTable tickets={[]} event={event} />
+                <TicketsTable tickets={event.tickets} event={event} />
             </div>
             <Footer />
         </main>

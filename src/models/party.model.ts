@@ -19,7 +19,18 @@ export interface IParty {
     slugger: string;
     address: {
         name: string;
+        street: string;
         city: string;
         state: string;
     }
+    tickets: ITicket[];
+}
+
+export interface ITicket {
+    id: string,
+    type: string,
+    buy_Initial: string,
+    buy_Final: string,
+    value: number,
+    quantity: number
 }

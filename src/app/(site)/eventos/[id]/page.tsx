@@ -1,13 +1,15 @@
 import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
 import { EventsSwiper } from "@/components/sections/events-swiper";
+import { fetchData } from "@/hooks/fetch";
+import { IParty } from "@/models/party.model";
 import { categories } from "@/utils/categories";
 import { events } from "@/utils/events";
 import Image from "next/image";
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
 
-export default function EventsByCategoryPage({params}: {params: {id: string}}) {
+export default async function EventsByCategoryPage({params}: {params: {id: string}}) {
+    const {partys}: {partys: Array<IParty>} = await fetchData('party/list');
     const category = categories.find(item => item.slug == params.id);
     
     return (
@@ -35,7 +37,7 @@ export default function EventsByCategoryPage({params}: {params: {id: string}}) {
                         </div>
                     </div>
                 </div>
-                <EventsSwiper events={events} title={`${category.name} em destaque`} />
+                <EventsSwiper events={partys} title={`${category.name} em destaque`} />
             </div>
             <Footer />
         </main>
