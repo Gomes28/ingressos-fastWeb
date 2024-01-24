@@ -203,7 +203,7 @@ function AsideCheckout({ total, selectedTickets, expiredAt }) {
                     </div>
                 ))}
             </div>
-            <Clock expiredAt={expiredAt}/>
+            {expiredAt && <Clock expiredAt={expiredAt}/>}
         </div>
     )
 }
