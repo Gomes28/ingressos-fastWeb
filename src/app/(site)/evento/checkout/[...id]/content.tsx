@@ -94,9 +94,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
             validate(errorEmails, (e) => setErrorEmails(e), emails) &&
             validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
         ) {
-            alert('certo');
         } else {
-            alert('errado');
         }
     }
 
