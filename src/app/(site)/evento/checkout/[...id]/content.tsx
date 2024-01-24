@@ -1,8 +1,6 @@
 'use client'
 
 import { InputText } from "@/components/form-components/input-text";
-import { Header } from "@/components/header";
-import { events } from "@/utils/events";
 import { useEffect, useState } from "react";
 import { useParticipant, useParticipantProps } from "@/hooks/useParticipant";
 import { FiClock, FiMapPin, FiShoppingCart } from "react-icons/fi";
@@ -12,23 +10,35 @@ import { Clock } from "@/components/clock";
 import { SelectedTickets } from "@/components/sections/tickets-table";
 import { IParty } from "@/models/party.model";
 
-export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string}) {
+export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
     const [participants, setParticipants] = useState<useParticipantProps[]>([]);
     const participant = useParticipant();
+
     const [names, setNames] = useState<Array<string>>([]);
+    const [errorNames, setErrorNames] = useState<Array<string | null>>([]);
+
     const [surnames, setSurnames] = useState<Array<string>>([]);
+
     const [emails, setEmails] = useState<Array<string>>([]);
+    const [errorEmails, setErrorEmails] = useState<Array<string | null>>([]);
+
     const [cpfs, setCpfs] = useState<Array<string>>([]);
+    const [errorCpfs, setErrorCpfs] = useState<Array<string | null>>([]);
+
     const [birthDates, setBirthDates] = useState<Array<string>>([]);
+
     const [tickets, setTickets] = useState([]);
     const [total, setTotal] = useState(0);
 
     const hydrate = () => {
         const newParticipants = [];
         const names = [];
+        const errorNames = [];
         const emails = [];
+        const errorEmails = [];
         const surnames = [];
         const cpfs = [];
+        const errorCpfs = [];
         const birthDates = [];
 
         selectedTickets.forEach(item => {
@@ -36,19 +46,58 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                 const newParticipant = participant;
                 newParticipants.push(newParticipant);
                 names.push('');
+                errorNames.push(null);
                 surnames.push('');
                 emails.push('');
+                errorEmails.push(null);
                 cpfs.push('');
+                errorCpfs.push(null);
                 birthDates.push('');
             }
         });
 
         setNames(names);
+        setErrorNames(errorNames);
+
         setSurnames(surnames);
+
         setEmails(emails);
+        setErrorEmails(errorEmails);
+
         setBirthDates(birthDates);
+
         setCpfs(cpfs);
+        setErrorCpfs(errorCpfs);
+
         setParticipants(newParticipants);
+    }
+
+    const validate = (errors, setErrors, values) => {
+        let isValid = true;
+        const valuesErrors = [...errors];
+        values.forEach((item, index) => {
+            if(item == null || item == '' ) {
+                valuesErrors[index] = 'Insira um valor.';
+                isValid = false;
+            } else {
+                valuesErrors[index] = null;
+            }
+        });
+        setErrors(valuesErrors);
+        console.log(isValid);
+        return isValid;
+    }
+
+    const handleSubmit = async () => {
+        if(
+            validate(errorNames, (e) => setErrorNames(e), names) &&
+            validate(errorEmails, (e) => setErrorEmails(e), emails) &&
+            validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
+        ) {
+            alert('certo');
+        } else {
+            alert('errado');
+        }
     }
 
     useEffect(() => {
@@ -89,7 +138,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                             <span className="text-base font-medium text-gray-3">{event.address.name}, {event.address.street} - {event.address.city}, {event.address.state}</span>
                         </div>}
                         <div className="flex lg:hidden mt-8">
-                            <AsideCheckout total={total} selectedTickets={selectedTickets} expiredAt={expiredAt}/>
+                            <AsideCheckout total={total} selectedTickets={selectedTickets} expiredAt={expiredAt} />
                         </div>
                     </div>
                     <div className="mt-6 flex flex-col gap-6">
@@ -108,6 +157,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                         values[index] = e.target.value;
                                         setNames(values);
                                     }}
+                                    error={errorNames[index]}
                                 />
                                 <InputText
                                     title="Email"
@@ -118,6 +168,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                         values[index] = e.target.value;
                                         setEmails(values);
                                     }}
+                                    error={errorEmails[index]}
                                 />
                                 <InputText
                                     title="CPF"
@@ -128,6 +179,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                         values[index] = maskCpf(e.target.value);
                                         setCpfs(values);
                                     }}
+                                    error={errorCpfs[index]}
                                 />
                                 <InputText
                                     title="Data de nascimento"
@@ -169,7 +221,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                     <div className="flex max-lg:flex-col justify-between lg:items-center mt-6 gap-4">
                         <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
                         <div className="w-fit max-lg:w-full">
-                            <ButtonPrimary title="Continuar" full={true} />
+                            <ButtonPrimary title="Continuar" full={true} onClick={handleSubmit} />
                         </div>
                     </div>
                 </div>
@@ -203,7 +255,7 @@ function AsideCheckout({ total, selectedTickets, expiredAt }) {
                     </div>
                 ))}
             </div>
-            {expiredAt && <Clock expiredAt={expiredAt}/>}
+            {expiredAt && <Clock expiredAt={expiredAt} />}
         </div>
     )
 }

@@ -4,11 +4,10 @@ import { maskPrice } from "@/helpers/mask";
 import { ITicket } from "@/models/party.model";
 import { api } from "@/services/api.service";
 import { payments } from "@/utils/payments";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { FiLock } from "react-icons/fi";
-import slugify from "slugify";
 
 export interface Ticket {
     id: number,
@@ -52,17 +51,24 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
 
     const handleSubmit = async () => {
         try {
-            if(selectedTickets.length == 0) {
+            const { 'access_token': token } = parseCookies();
+
+            if (selectedTickets.length == 0) {
                 return alert('Selecione os ingressos.');
             }
+
+            if(!token) {
+                return router.push('/entrar');
+            }
+
             const res = await api.post('user/reservation/create', selectedTickets.map(item => {
                 return {
                     ticket_id: item.ticket.id,
                     quantity: item.quantity
                 }
             })).then(res => res.data);
-            
-            if(res.Reservation) {
+
+            if (res.Reservation) {
                 router.push(`/evento/checkout/${res.Reservation.reference_id}`);
             }
         } catch (error) {
