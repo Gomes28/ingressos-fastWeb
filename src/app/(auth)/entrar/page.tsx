@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { setCookies } from "./actions";
+import { api } from "@/services/api.service";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -25,6 +26,7 @@ export default function LoginPage() {
             if(res) {
                 await setCookies('access_token', JSON.stringify(res.access_token));
                 await setCookies('user', JSON.stringify(res.user));
+                api.defaults.headers['Authorization'] = `Bearer ${res.access_token}`;
                 router.push('/');
             } else {
                 setError(true);

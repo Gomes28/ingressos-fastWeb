@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { Header } from '@/components/header'
+import { api } from '@/services/api.service'
 
 export const metadata: Metadata = {
     title: 'Ingressos Fast',

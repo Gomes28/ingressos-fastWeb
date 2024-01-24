@@ -2,8 +2,10 @@
 
 import { maskPrice } from "@/helpers/mask";
 import { ITicket } from "@/models/party.model";
+import { api } from "@/services/api.service";
 import { payments } from "@/utils/payments";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiLock } from "react-icons/fi";
 import slugify from "slugify";
@@ -25,6 +27,7 @@ export interface SelectedTickets {
 }
 
 export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) {
+    const router = useRouter();
     const [selectedTickets, setSelectedTickets] = useState<SelectedTickets[]>([]);
     const [total, setTotal] = useState(0);
 
@@ -44,6 +47,26 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
             setSelectedTickets(values);
         } else {
             setSelectedTickets(old => [...old, { ticket, quantity }]);
+        }
+    }
+
+    const handleSubmit = async () => {
+        try {
+            if(selectedTickets.length == 0) {
+                return alert('Selecione os ingressos.');
+            }
+            const res = await api.post('user/reservation/create', selectedTickets.map(item => {
+                return {
+                    ticket_id: item.ticket.id,
+                    quantity: item.quantity
+                }
+            })).then(res => res.data);
+            
+            if(res.Reservation) {
+                router.push(`/evento/checkout/${res.Reservation.reference_id}`);
+            }
+        } catch (error) {
+            alert(error.message);
         }
     }
 
@@ -83,7 +106,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         values.push(i);
                     }
                     return (
-                        <div className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
+                        <div key={ticket.id} className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-7 flex flex-col">
                                 <div className="flex gap-4 items-center">
                                     <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
@@ -132,7 +155,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         values.push(i);
                     }
                     return (
-                        <div className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
+                        <div key={ticket.id} className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-9 flex flex-col">
                                 <div className="flex gap-2 items-center flex-wrap mb-4">
                                     <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
@@ -177,7 +200,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <span className="text-lg font-semibold"></span>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <Link href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} className="h-12 px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</Link>
+                        <button /* href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} */ onClick={handleSubmit} className="h-12 px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
                     </div>
                 </div>
             </div>
@@ -195,7 +218,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         </div>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <Link href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} className="h-12 w-full px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</Link>
+                        <button /* href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} */ onClick={handleSubmit} className="h-12 w-full px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
                     </div>
                 </div>
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 text-sm bg-gray-100">
