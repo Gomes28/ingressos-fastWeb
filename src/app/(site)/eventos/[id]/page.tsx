@@ -9,7 +9,7 @@ import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
 
 export default async function EventsByCategoryPage({params}: {params: {id: string}}) {
-    const {partys}: {partys: Array<IParty>} = await fetchData('party/list');
+    const {partys}: {partys: Array<IParty>} = await fetchData('party/list', 0);
     const category = categories.find(item => item.slug == params.id);
     
     return (

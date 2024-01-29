@@ -10,7 +10,7 @@ import { fetchData } from '@/hooks/fetch';
 import { IParty } from '@/models/party.model';
 
 export default async function Home() {
-  const {partys}: {partys: Array<IParty>} = await fetchData('party/list');
+  const {partys}: {partys: Array<IParty>} = await fetchData('party/list', 0);
 
   return (
     <main className="flex flex-col lg:gap-16 gap-8 mt-8">
