@@ -54,7 +54,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
                     </div>
                     <ContentEvent content={event.description} />
                 </div>
-                {event.tickets && event.tickets.length > 0 && <TicketsTable tickets={event.tickets} event={event} />}
+                <TicketsTable tickets={event.tickets} event={event} />
             </div>
             <Footer />
         </main>

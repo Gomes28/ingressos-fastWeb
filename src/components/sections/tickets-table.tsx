@@ -102,6 +102,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <span>Total</span>
                     </div>
                 </div>
+                {tickets.length == 0 && <span className="p-3 flex text-sm font-medium">Nenhum ingresso disponível</span>}
                 {tickets.map((ticket, index) => {
                     const date = new Date(ticket.buy_Initial);
                     const [day, month, year] = date.toLocaleDateString().split('/');
@@ -151,6 +152,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <span>Quant.</span>
                     </div>
                 </div>
+                {tickets.length == 0 && <span className="p-3 flex text-sm font-medium">Nenhum ingresso disponível</span>}
                 {tickets.map((ticket, index) => {
                     const date = new Date(ticket.buy_Final);
                     const [day, month, year] = date.toLocaleDateString().split('/');
@@ -206,7 +208,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <span className="text-lg font-semibold"></span>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <button /* href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} */ onClick={handleSubmit} className="h-12 px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
+                        <button onClick={handleSubmit} disabled={tickets.length == 0 || selectedTickets.length == 0} className="h-12 px-8 bg-primary disabled:opacity-25 text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
                     </div>
                 </div>
             </div>
@@ -224,7 +226,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         </div>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <button /* href={`/evento/checkout/${slugify(event.name, { lower: true })}/${event.id}`} */ onClick={handleSubmit} className="h-12 w-full px-8 bg-primary text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
+                        <button onClick={handleSubmit} disabled={tickets.length == 0 || selectedTickets.length == 0} className="h-12 w-full px-8 bg-primary disabled:opacity-25 text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
                     </div>
                 </div>
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 text-sm bg-gray-100">
