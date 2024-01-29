@@ -13,7 +13,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
 
     return (
         <main className="min-h-screen flex flex-col">
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col pb-8">
                 <div className="h-[208px] lg:h-[400px] relative overflow-hidden mb-6 lg:mb-12">
                     {event?.logo && <Image src={'https://images.ingressosfast.com.br/' + event.logo} alt={event.name} fill className="object-cover h-full w-full" />}
                     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-3xl"></div>
@@ -54,7 +54,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
                     </div>
                     <ContentEvent content={event.description} />
                 </div>
-                <TicketsTable tickets={event.tickets} event={event} />
+                {event.tickets && event.tickets.length > 0 && <TicketsTable tickets={event.tickets} event={event} />}
             </div>
             <Footer />
         </main>
