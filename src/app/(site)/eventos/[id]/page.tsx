@@ -3,7 +3,6 @@ import { EventsSwiper } from "@/components/sections/events-swiper";
 import { fetchData } from "@/hooks/fetch";
 import { IParty } from "@/models/party.model";
 import { categories } from "@/utils/categories";
-import { events } from "@/utils/events";
 import Image from "next/image";
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
