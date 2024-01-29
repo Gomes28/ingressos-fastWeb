@@ -28,7 +28,7 @@ export interface IParty {
 
 export interface ITicket {
     id: string,
-    type: string,
+    name: string,
     buy_Initial: string,
     buy_Final: string,
     price: number,

@@ -116,7 +116,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <div key={ticket.id} className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-7 flex flex-col">
                                 <div className="flex gap-4 items-center">
-                                    <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
+                                    <h4 className="text-base font-medium text-gray-3">{ticket.name}</h4>
                                     <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
                                     <span className="text-black/60 text-sm">Taxa de serviço R$ 0,00</span>
                                     <div className="w-[6px] h-[6px] rounded-lg bg-black/30" />
@@ -166,7 +166,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <div key={ticket.id} className={`${index % 2 == 0 && 'bg-gray-100'} grid grid-cols-12 px-3 py-3 gap-4 ${index < tickets.length - 1 && 'border-b'} text-sm text-gray-5`}>
                             <div className="col-span-9 flex flex-col">
                                 <div className="flex gap-2 items-center flex-wrap mb-4">
-                                    <h4 className="text-base font-medium text-gray-3">{ticket.type}</h4>
+                                    <h4 className="text-base font-medium text-gray-3">{ticket.name}</h4>
                                     <span className="text-black/60 text-sm">Taxa de serviço R$ {0}</span>
                                     <span className="text-black/60 text-sm">Disponível até {day}/{month} às {date.getHours()}:{date.getMinutes()}</span>
                                 </div>
