@@ -9,6 +9,8 @@ import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { Clock } from "@/components/clock";
 import { SelectedTickets } from "@/components/sections/tickets-table";
 import { IParty } from "@/models/party.model";
+import { api } from "@/services/api.service";
+import { toNumber } from "vanilla-masker";
 
 export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
     const [participants, setParticipants] = useState<useParticipantProps[]>([]);
@@ -94,6 +96,24 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
             validate(errorEmails, (e) => setErrorEmails(e), emails) &&
             validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
         ) {
+            const res = await api.post('user/buy/create', {
+                reservation_id: params.id,
+                type_payment: "pix",
+                email_received_tickets: "nascimento.gomes@icloud.com",
+                party_id: event.id,
+                ticket_owners: names.map((_, index) => {
+                    return {
+                        "ticket_data": {
+                          "ticket_id": tickets[index].id,
+                          "cpf": toNumber(cpfs[index]),
+                          "name": names[index],
+                          "email": emails[index]
+                        }
+                    }
+                }),
+              });
+              console.log(res);
+
         } else {
         }
     }
@@ -109,7 +129,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
         hydrate();
         let total = 0;
         selectedTickets.forEach(item => {
-            total = total + (+item.quantity) * (item.ticket.value + 0);
+            total = total + (+item.quantity) * (item.ticket.price + 0);
         });
         setTotal(total);
     }, []);
@@ -191,7 +211,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                 />
                             </div>
                         ))}
-                        <div className="border border-primary rounded-md overflow-hidden">
+                        {/* <div className="border border-primary rounded-md overflow-hidden">
                             <div className="bg-gray-100 px-4 py-3">
                                 <div className="flex flex-col">
                                     <span className="font-semibold text-base">Dados do cartão</span>
@@ -214,7 +234,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="flex max-lg:flex-col justify-between lg:items-center mt-6 gap-4">
                         <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
@@ -232,6 +252,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
 }
 
 function AsideCheckout({ total, selectedTickets, expiredAt }) {
+    console.log(selectedTickets)
     return (
         <div className="sticky top-24 w-full">
             <div className="w-full border rounded-md">
@@ -245,8 +266,8 @@ function AsideCheckout({ total, selectedTickets, expiredAt }) {
                 {selectedTickets.map((item, index) => (
                     <div className="flex justify-between items-center border-b gap-4 p-4" key={index}>
                         <div className="flex flex-col gap-1">
-                            <span className="text-sm font-semibold text-gray-3">{item.ticket.type}</span>
-                            <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.value).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
+                            <span className="text-sm font-semibold text-gray-3">{item.ticket.name}</span>
+                            <span className="text-sm font-medium text-gray-500">R$ {maskPrice((+item.quantity * item.ticket.price).toString())} (+ R$ {maskPrice((+item.quantity * item.ticket.service_charge).toString())} taxa)</span>
                             <span className="text-xs font-light text-gray-6">Vendas até 26/01/2024</span>
                         </div>
                         <span>{item.quantity}</span>
