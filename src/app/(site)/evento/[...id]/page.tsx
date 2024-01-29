@@ -9,7 +9,7 @@ import { fetchData } from "@/hooks/fetch";
 
 
 export default async function EventPage({ params }: { params: { id: Array<string> } }) {
-    const {partys: event}: {partys: IParty} = await fetchData(`party/${params.id[params.id.length - 1]}`);
+    const {partys: event}: {partys: IParty} = await fetchData(`party/${params.id[params.id.length - 1]}`, 0);
 
     return (
         <main className="min-h-screen flex flex-col">

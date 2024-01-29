@@ -31,6 +31,6 @@ export interface ITicket {
     type: string,
     buy_Initial: string,
     buy_Final: string,
-    value: number,
+    price: number,
     quantity?: number
 }

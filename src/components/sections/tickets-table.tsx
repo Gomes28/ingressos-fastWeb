@@ -79,7 +79,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
     useEffect(() => {
         let total = 0;
         selectedTickets.forEach(item => {
-            total = total + item.quantity * (item.ticket.value + 0);
+            total = total + item.quantity * (item.ticket.price + 0);
         });
         setTotal(total);
     }, [selectedTickets]);
@@ -108,7 +108,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                     const [day, month, year] = date.toLocaleDateString().split('/');
                     const values = [];
                     const selected = selectedTickets.find(item => item.ticket.id == ticket.id);
-                    const total = selected ? (selected.quantity * (ticket.value + 0)).toString() : '000';
+                    const total = selected ? (selected.quantity * (ticket.price + 0)).toString() : '000';
                     for (let i = 0; i <= 8; i++) {
                         values.push(i);
                     }
@@ -126,7 +126,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                                 {/* <p className="text-xs">{ticket.description}</p> */}
                             </div>
                             <div className="col-span-1 flex items-center">
-                                <span>R$ {maskPrice(ticket.value.toString())}</span>
+                                <span>R$ {maskPrice(ticket.price.toString())}</span>
                             </div>
                             <div className="col-span-2 flex items-center">
                                 <div className="h-12 w-20 px-3 rounded-md bg-white flex items-center border">
@@ -158,7 +158,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                     const [day, month, year] = date.toLocaleDateString().split('/');
                     const values = [];
                     const selected = selectedTickets.find(item => item.ticket.id == ticket.id);
-                    const total = selected ? (selected.quantity * (ticket.value + 0)).toString() : '000';
+                    const total = selected ? (selected.quantity * (ticket.price + 0)).toString() : '000';
                     for (let i = 0; i <= 8; i++) {
                         values.push(i);
                     }
