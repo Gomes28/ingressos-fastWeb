@@ -28,8 +28,6 @@ export default async function CheckoutPage({ params }: { params: { id: Array<str
         return selectedTicket;
     });
 
-    console.log(selectedTickets[0])
-
     return (
         <CheckoutContent params={params} selectedTickets={selectedTickets} event={res.reservation.party} expiredAt={res.reservation.expired_at} />
     )

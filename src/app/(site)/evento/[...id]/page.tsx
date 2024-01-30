@@ -6,10 +6,17 @@ import { IoTicketOutline } from "react-icons/io5";
 import { ContentEvent } from "./content";
 import { IParty } from "@/models/party.model";
 import { fetchData } from "@/hooks/fetch";
+import { maskPrice } from "@/helpers/mask";
 
 
 export default async function EventPage({ params }: { params: { id: Array<string> } }) {
-    const {partys: event}: {partys: IParty} = await fetchData(`party/${params.id[params.id.length - 1]}`, 0);
+    const { partys: event }: { partys: IParty } = await fetchData(`party/${params.id[params.id.length - 1]}`, 0);
+    const prices = event.tickets.map(ticket => ticket.price);
+    const maxPrice = Math.max(...prices);
+    const minPrice = Math.min(...prices);
+    const startDate = new Date(event?.date_initial.date);
+    const endDate = new Date(event?.date_initial.date);
+    let months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
     return (
         <main className="min-h-screen flex flex-col">
@@ -31,7 +38,10 @@ export default async function EventPage({ params }: { params: { id: Array<string
                         </span>
                         <div className="flex flex-col">
                             <span className="text-base font-medium text-gray-3">Sábado e Domingo às 15h00</span>
-                            <span className="text-sm font-light text-gray-4">27 a 28 de Janeiro</span>
+                            {startDate.getDate() != endDate.getDate() ?
+                                <span className="text-sm font-light text-gray-4">{startDate.getDate()} a {endDate.getDate()} de {months[endDate.getMonth()]}</span> :
+                                <span className="text-sm font-light text-gray-4">{startDate.getDate()} de {months[endDate.getMonth()]}</span>
+                            }
                         </div>
                     </div>
                     <div className="flex gap-4 mt-4">
@@ -46,7 +56,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
                                 <IoTicketOutline />
                             </span>
                             <div className="flex flex-col">
-                                <span>Ingressos entre <strong>R$ 80,00 e R$ 1710,00</strong></span>
+                                <span>Ingressos entre <strong>R$ {maskPrice(minPrice.toString())} e R$ {maskPrice(maxPrice.toString())}</strong></span>
                                 <span className="text-xs text-green-600 font-medium">Pague em até 12x ou no pix</span>
                             </div>
                         </div>

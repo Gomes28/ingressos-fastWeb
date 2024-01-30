@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { FiLock } from "react-icons/fi";
+import { ButtonPrimary } from "../buttons/button-primary";
 
 export interface Ticket {
     id: number,
@@ -26,6 +27,7 @@ export interface SelectedTickets {
 }
 
 export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [selectedTickets, setSelectedTickets] = useState<SelectedTickets[]>([]);
     const [total, setTotal] = useState(0);
@@ -51,13 +53,14 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
 
     const handleSubmit = async () => {
         try {
+            setLoading(true);
             const { 'access_token': token } = parseCookies();
 
             if (selectedTickets.length == 0) {
                 return alert('Selecione os ingressos.');
             }
 
-            if(!token) {
+            if (!token) {
                 return router.push('/entrar');
             }
 
@@ -73,6 +76,8 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
             }
         } catch (error) {
             alert(error.message);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -208,7 +213,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         <span className="text-lg font-semibold"></span>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <button onClick={handleSubmit} disabled={tickets.length == 0 || selectedTickets.length == 0} className="h-12 px-8 bg-primary disabled:opacity-25 text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
+                        <ButtonPrimary title="Comprar" Icon={FiLock} loading={loading} disabled={tickets.length == 0 || selectedTickets.length == 0} onClick={handleSubmit} />
                     </div>
                 </div>
             </div>
@@ -226,7 +231,7 @@ export function TicketsTable({ tickets, event }: { tickets: ITicket[], event }) 
                         </div>
                     </div>
                     <div className="col-span-2 flex items-center">
-                        <button onClick={handleSubmit} disabled={tickets.length == 0 || selectedTickets.length == 0} className="h-12 w-full px-8 bg-primary disabled:opacity-25 text-white rounded-md text-base font-medium flex gap-4 items-center"><FiLock />Comprar</button>
+                        <ButtonPrimary title="Comprar" Icon={FiLock} loading={loading} />
                     </div>
                 </div>
                 <div className="grid grid-cols-12 px-3 py-3 gap-4 text-sm bg-gray-100">

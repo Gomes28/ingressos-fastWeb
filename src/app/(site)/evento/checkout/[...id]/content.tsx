@@ -11,8 +11,11 @@ import { SelectedTickets } from "@/components/sections/tickets-table";
 import { IParty } from "@/models/party.model";
 import { api } from "@/services/api.service";
 import { toNumber } from "vanilla-masker";
+import { useRouter } from "next/navigation";
 
 export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
+    const router = useRouter();
+    
     const [participants, setParticipants] = useState<useParticipantProps[]>([]);
     const participant = useParticipant();
 
@@ -31,6 +34,9 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
 
     const [tickets, setTickets] = useState([]);
     const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
 
     const hydrate = () => {
         const newParticipants = [];
@@ -91,30 +97,45 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
     }
 
     const handleSubmit = async () => {
-        if(
-            validate(errorNames, (e) => setErrorNames(e), names) &&
-            validate(errorEmails, (e) => setErrorEmails(e), emails) &&
-            validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
-        ) {
-            const res = await api.post('user/buy/create', {
-                reservation_id: params.id,
-                type_payment: "pix",
-                email_received_tickets: "nascimento.gomes@icloud.com",
-                party_id: event.id,
-                ticket_owners: names.map((_, index) => {
-                    return {
-                        "ticket_data": {
-                          "ticket_id": tickets[index].id,
-                          "cpf": toNumber(cpfs[index]),
-                          "name": names[index],
-                          "email": emails[index]
+        try {
+            setLoading(true);
+            {error && setError(null)}
+            if(
+                validate(errorNames, (e) => setErrorNames(e), names) &&
+                validate(errorEmails, (e) => setErrorEmails(e), emails) &&
+                validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
+            ) {
+                const res = await api.post('user/buy/create', {
+                    reservation_id: params.id,
+                    type_payment: "pix",
+                    email_received_tickets: "nascimento.gomes@icloud.com",
+                    party_id: event.id,
+                    ticket_owners: names.map((_, index) => {
+                        return {
+                            "ticket_data": {
+                              "ticket_id": tickets[index].id,
+                              "cpf": toNumber(cpfs[index]),
+                              "name": names[index],
+                              "email": emails[index]
+                            }
                         }
-                    }
-                }),
-              });
-              console.log(res);
-
-        } else {
+                    }),
+                  }).then(res => res.data);
+    
+                  if(res?.Buy?.reference_id) {
+                    router.push(`/evento/checkout/buy/${res?.Buy?.reference_id}`);
+                  } else {
+                    throw new Error('Erro ao realizar compra, tente novamente ou entre em contato.');
+                  }
+    
+            } else {
+                throw new Error('Preencha todos os dados antes de prosseguir.');
+            }
+        } catch (error) {
+            console.log(error.message);
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -164,7 +185,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                         {participants.map((item, index) => (
                             <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 border p-6 bg-gray-50 rounded-md" key={index}>
                                 <div className="col-span-2">
-                                    <span className="font-medium text-gray-3">Ingresso n° {index + 1}: <strong className="text-primary">{tickets[index].type}</strong></span>
+                                    <span className="font-medium text-gray-3">Ingresso n° {index + 1}: <strong className="text-primary">{tickets[index].name}</strong></span>
                                 </div>
                                 <InputText
                                     title="Nome completo"
@@ -239,9 +260,10 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                     <div className="flex max-lg:flex-col justify-between lg:items-center mt-6 gap-4">
                         <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
                         <div className="w-fit max-lg:w-full">
-                            <ButtonPrimary title="Continuar" full={true} onClick={handleSubmit} />
+                            <ButtonPrimary title="Continuar" full={true} onClick={handleSubmit} loading={loading}/>
                         </div>
                     </div>
+                    {error != null && <span className="flex px-4 py-2 bg-red-100 text-red-500 w-fit rounded-md font-medium mt-4">{error}</span>}
                 </div>
                 <div className="hidden lg:flex h-full col-span-4 relative">
                     <AsideCheckout total={total} selectedTickets={selectedTickets} expiredAt={expiredAt} />

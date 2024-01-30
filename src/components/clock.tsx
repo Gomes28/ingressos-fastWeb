@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { FiClock } from "react-icons/fi";
 
-export function Clock({ expiredAt }) {
+export function Clock({ expiredAt, text, onFinish, onStart }: {expiredAt, text?: string, onFinish?: () => void, onStart?: () => void}) {
     const [tempoRestante, setTempoRestante] = useState({
         minutos: 0,
         segundos: 0,
@@ -11,23 +11,32 @@ export function Clock({ expiredAt }) {
 
     useEffect(() => {
         const [day, month, year, hours, minutes, seconds] = expiredAt.split(/[\s/:]/);
-        const expirationDate = new Date(+`20${year}`, month - 1, day, hours, minutes, seconds);
+        const expirationDate = new Date(year < 2000 ? +`20${year}` : year, month - 1, day, hours, minutes, seconds);
         const currentDate = new Date();
         const timeDifference = expirationDate.getTime() - currentDate.getTime();
         const initialMinutes = Math.floor(timeDifference / (1000 * 60));
         const initialSeconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-        setTempoRestante({
-            minutos: initialMinutes,
-            segundos: initialSeconds
-        })
+        if(initialMinutes < 0) {
+            setTempoRestante({
+                minutos: 0,
+                segundos: 0
+            });
+            {onFinish && onFinish()}
+        } else {
+            {onStart && onStart()}
+            setTempoRestante({
+                minutos: initialMinutes,
+                segundos: initialSeconds
+            });
+        }
     }, [expiredAt]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (tempoRestante.minutos === 0 && tempoRestante.segundos === 0) {
+            if ((tempoRestante.minutos === 0 && tempoRestante.segundos === 0) || tempoRestante.minutos < 0) {
                 clearInterval(interval);
-                alert('Contador atingiu zero!');
+                onFinish();
             } else {
                 setTempoRestante((prevState) => {
                     if (prevState.segundos === 0) {
@@ -56,7 +65,7 @@ export function Clock({ expiredAt }) {
             </div>
             <div className="flex-1 flex justify-end">
                 <p className="text-xs">
-                    Após este tempo, os ingressos serão liberados para venda novamente.
+                    {text ?? 'Após este tempo, os ingressos serão liberados para venda novamente.'}
                 </p>
             </div>
         </div>
