@@ -3,7 +3,8 @@
 import { InputText } from "@/components/form-components/input-text";
 import { useEffect, useState } from "react";
 import { useParticipant, useParticipantProps } from "@/hooks/useParticipant";
-import { FiClock, FiMapPin, FiShoppingCart } from "react-icons/fi";
+import { FiClock, FiCreditCard, FiMapPin, FiShoppingCart } from "react-icons/fi";
+import { FaPix } from "react-icons/fa6";
 import { maskCpf, maskPrice } from "@/helpers/mask";
 import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { Clock } from "@/components/clock";
@@ -15,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
     const router = useRouter();
-    
+
     const [participants, setParticipants] = useState<useParticipantProps[]>([]);
     const participant = useParticipant();
 
@@ -34,6 +35,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
 
     const [tickets, setTickets] = useState([]);
     const [total, setTotal] = useState(0);
+    const [type, setType] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -84,7 +86,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
         let isValid = true;
         const valuesErrors = [...errors];
         values.forEach((item, index) => {
-            if(item == null || item == '' ) {
+            if (item == null || item == '') {
                 valuesErrors[index] = 'Insira um valor.';
                 isValid = false;
             } else {
@@ -99,8 +101,8 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            {error && setError(null)}
-            if(
+            { error && setError(null) }
+            if (
                 validate(errorNames, (e) => setErrorNames(e), names) &&
                 validate(errorEmails, (e) => setErrorEmails(e), emails) &&
                 validate(errorCpfs, (e) => setErrorCpfs(e), cpfs)
@@ -113,21 +115,21 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                     ticket_owners: names.map((_, index) => {
                         return {
                             "ticket_data": {
-                              "ticket_id": tickets[index].id,
-                              "cpf": toNumber(cpfs[index]),
-                              "name": names[index],
-                              "email": emails[index]
+                                "ticket_id": tickets[index].id,
+                                "cpf": toNumber(cpfs[index]),
+                                "name": names[index],
+                                "email": emails[index]
                             }
                         }
                     }),
-                  }).then(res => res.data);
-    
-                  if(res?.Buy?.reference_id) {
+                }).then(res => res.data);
+
+                if (res?.Buy?.reference_id) {
                     router.push(`/evento/checkout/buy/${res?.Buy?.reference_id}`);
-                  } else {
+                } else {
                     throw new Error('Erro ao realizar compra, tente novamente ou entre em contato.');
-                  }
-    
+                }
+
             } else {
                 throw new Error('Preencha todos os dados antes de prosseguir.');
             }
@@ -232,7 +234,31 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                 />
                             </div>
                         ))}
-                        {/* <div className="border border-primary rounded-md overflow-hidden">
+                        <div className="flex flex-col gap-4">
+                            <strong className="font-semibold text-xl">Informações de pagamento</strong>
+                            <ul className="flex flex-col gap-2 w-fit">
+                                <li className="flex-1">
+                                    <button className={`w-full flex items-center gap-4 ${type == 0 ? 'bg-gray-100' : 'bg-transparent'} py-3 px-6 rounded-md`} onClick={() => setType(0)}>
+                                        <div className={`h-5 w-5 border-2 ${type == 0 ? 'border-blue-500' : 'border-gray-600'} rounded-full flex items-center justify-center`}>
+                                            {type == 0 && <div className="h-3 w-3 bg-blue-500 rounded-full"></div>}
+                                        </div>
+                                        <FiCreditCard size={24} />
+                                        <span className="font-medium">Cartão de crédito</span>
+                                        <span className="text-xs font-medium bg-blue-100 text-blue-600 py-1 px-2 rounded-md">Parcele em até 12x</span>
+                                    </button>
+                                </li>
+                                <li className="flex-1">
+                                    <button className={`w-full flex items-center gap-4 ${type == 1 ? 'bg-gray-100' : 'bg-transparent'} py-3 px-6 rounded-md`} onClick={() => setType(1)}>
+                                        <div className={`h-5 w-5 border-2 ${type == 1 ? 'border-blue-500' : 'border-gray-600'} rounded-full flex items-center justify-center`}>
+                                            {type == 1 && <div className="h-3 w-3 bg-blue-500 rounded-full"></div>}
+                                        </div>
+                                        <FaPix size={24} />
+                                        <span className="font-medium">Pix</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        {type == 0 && <div className="border border-primary rounded-md overflow-hidden">
                             <div className="bg-gray-100 px-4 py-3">
                                 <div className="flex flex-col">
                                     <span className="font-semibold text-base">Dados do cartão</span>
@@ -255,12 +281,12 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                     </div>
                                 </div>
                             </div>
-                        </div> */}
+                        </div>}
                     </div>
                     <div className="flex max-lg:flex-col justify-between lg:items-center mt-6 gap-4">
                         <span>Ao prosseguir, você declara estar ciente dos Termos e Políticas</span>
                         <div className="w-fit max-lg:w-full">
-                            <ButtonPrimary title="Continuar" full={true} onClick={handleSubmit} loading={loading}/>
+                            <ButtonPrimary title="Continuar" full={true} onClick={handleSubmit} loading={loading} />
                         </div>
                     </div>
                     {error != null && <span className="flex px-4 py-2 bg-red-100 text-red-500 w-fit rounded-md font-medium mt-4">{error}</span>}
@@ -274,7 +300,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
 }
 
 function AsideCheckout({ total, selectedTickets, expiredAt }) {
-    console.log(selectedTickets)
+    const router = useRouter();
     return (
         <div className="sticky top-24 w-full">
             <div className="w-full border rounded-md">
@@ -296,7 +322,7 @@ function AsideCheckout({ total, selectedTickets, expiredAt }) {
                     </div>
                 ))}
             </div>
-            {expiredAt && <Clock expiredAt={expiredAt} />}
+            {expiredAt && <Clock expiredAt={expiredAt} onFinish={() => router.refresh()} />}
         </div>
     )
 }

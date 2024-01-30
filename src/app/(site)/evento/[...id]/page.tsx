@@ -16,7 +16,7 @@ export default async function EventPage({ params }: { params: { id: Array<string
     const minPrice = Math.min(...prices);
     const startDate = new Date(event?.date_initial.date);
     const endDate = new Date(event?.date_initial.date);
-    let months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    let months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
     return (
         <main className="min-h-screen flex flex-col">
