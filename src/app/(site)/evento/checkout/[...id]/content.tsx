@@ -13,6 +13,7 @@ import { IParty } from "@/models/party.model";
 import { api } from "@/services/api.service";
 import { toNumber } from "vanilla-masker";
 import { useRouter } from "next/navigation";
+import { useForm } from "@/hooks/useForm";
 
 export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
     const router = useRouter();
@@ -38,6 +39,19 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
     const [type, setType] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const name = useForm();
+    const email = useForm();
+    const cpf = useForm();
+    const birth = useForm();
+    const phone = useForm();
+    const street = useForm();
+    const number = useForm();
+    const neighborhood = useForm();
+    const zipcode = useForm();
+    const city = useForm();
+    const complement = useForm();
+    const state = useForm();
 
 
     const hydrate = () => {
@@ -265,19 +279,52 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                                     <span className="text-sm text-primary">Parcele em até 12x</span>
                                 </div>
                             </div>
-                            <div className="p-4">
+                            <div className="flex flex-col gap-6 p-4">
                                 <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4">
                                     <div className="col-span-2 flex">
-                                        <InputText title="Nome impresso no cartão" />
+                                        <InputText title="Nome impresso no cartão" placeholder="Insira o nome impresso no cartão"/>
                                     </div>
                                     <div className="col-span-2 flex">
-                                        <InputText title="Número do cartão" />
+                                        <InputText title="Número do cartão" placeholder="Insira o número do cartão" />
                                     </div>
                                     <div className="col-span-1 flex">
                                         <InputText title="Data de validade" placeholder="00/00" />
                                     </div>
                                     <div className="col-span-1 flex">
                                         <InputText title="Código de segurança" placeholder="000" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 border-t pt-4">
+                                    <div className="col-span-2 flex">
+                                        <InputText title="Email" placeholder="Insira seu email" />
+                                    </div>
+                                    <div className="col-span-2 flex">
+                                        <InputText title="Cpf" placeholder="Insira seu CPF" />
+                                    </div>
+                                    <div className="col-span-1 flex">
+                                        <InputText title="Telefone" placeholder="(00) 00000-0000" />
+                                    </div>
+                                    <div className="col-span-1 flex">
+                                        <InputText title="Data Nascimento" type="date" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 border-t pt-4">
+                                        <div className="col-span-1 flex">
+                                            <InputText title="Cep" placeholder="00000-000" />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4">
+                                        <InputText title="Estado" placeholder="00000-000" />
+                                        <InputText title="Cidade" placeholder="00000-000" />
+                                        <InputText title="Bairro" placeholder="00000-000" />
+                                    </div>
+                                    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
+                                        <InputText title="Rua" placeholder="00000-000" />
+                                        <InputText title="Complemento" placeholder="00000-000" />
+                                    </div>
+                                    <div className="flex flex-col lg:grid lg:grid-cols-6 gap-4">
+                                        <InputText title="Número" placeholder="" />
                                     </div>
                                 </div>
                             </div>
