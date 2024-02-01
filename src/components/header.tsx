@@ -22,6 +22,8 @@ export function Header({ user }: { user?: IUser }) {
                                 className="w-full outline-none overflow-hidden text-ellipsis"
                             />
                         </div> */}
+
+                        
                     </div>
                     {user ?
                         <div className='hidden lg:flex gap-4 items-center'>
