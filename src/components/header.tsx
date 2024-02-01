@@ -14,14 +14,14 @@ export function Header({ user }: { user?: IUser }) {
                         <Link href={'/'} className="flex">
                             <Image src={'/logo.svg'} alt="" width={164} height={24} />
                         </Link>
-                        <div className="hidden lg:flex w-full max-w-[400px] px-3 h-12 border items-center rounded-md gap-3">
+                        {/* <div className="hidden lg:flex w-full max-w-[400px] px-3 h-12 border items-center rounded-md gap-3">
                             <FiSearch color={'#591BDC'} size={20} />
                             <input
                                 type="text"
                                 placeholder="Buscar eventos, shows, espetáculos, cursos..."
                                 className="w-full outline-none overflow-hidden text-ellipsis"
                             />
-                        </div>
+                        </div> */}
                     </div>
                     {user ?
                         <div className='hidden lg:flex gap-4 items-center'>

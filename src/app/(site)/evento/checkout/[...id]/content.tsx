@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParticipant, useParticipantProps } from "@/hooks/useParticipant";
 import { FiClock, FiCreditCard, FiMapPin, FiShoppingCart } from "react-icons/fi";
 import { FaPix } from "react-icons/fa6";
-import { maskCpf, maskPrice } from "@/helpers/mask";
+import { maskCpf, maskNumber, maskPrice } from "@/helpers/mask";
 import { ButtonPrimary } from "@/components/buttons/button-primary";
 import { Clock } from "@/components/clock";
 import { SelectedTickets } from "@/components/sections/tickets-table";
@@ -14,6 +14,7 @@ import { api } from "@/services/api.service";
 import { toNumber } from "vanilla-masker";
 import { useRouter } from "next/navigation";
 import { useForm } from "@/hooks/useForm";
+import axios from "axios";
 
 export function CheckoutContent({ params, selectedTickets, event, expiredAt }: { params: { id: Array<string> }, selectedTickets: Array<SelectedTickets>, event: IParty, expiredAt: string }) {
     const router = useRouter();
@@ -39,19 +40,27 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
     const [type, setType] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [addressValid, setAddressValid] = useState(false);
+
+
+    const numberCard = useForm('numberCard');
+    const codeCard = useForm('codeCard');
+    const expiredCard = useForm('expiredCard');
 
     const name = useForm();
     const email = useForm();
-    const cpf = useForm();
+    const cpf = useForm('cpf');
     const birth = useForm();
-    const phone = useForm();
+    const phone = useForm('phone');
     const street = useForm();
     const number = useForm();
     const neighborhood = useForm();
-    const zipcode = useForm();
+    const zipcode = useForm('cep');
     const city = useForm();
     const complement = useForm();
     const state = useForm();
+    const district = useForm();
+    const route = useForm();
 
 
     const hydrate = () => {
@@ -123,7 +132,7 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
             ) {
                 const res = await api.post('user/buy/create', {
                     reservation_id: params.id,
-                    type_payment: "pix",
+                    type_payment: type == 0 ? 'card' : "pix",
                     email_received_tickets: "nascimento.gomes@icloud.com",
                     party_id: event.id,
                     ticket_owners: names.map((_, index) => {
@@ -136,10 +145,32 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                             }
                         }
                     }),
+                    card_data: type == 0 ? {
+                        name: name.value,
+                         cpf: maskNumber(cpf.value),
+                         email: email.value,
+                         birth: birth.value,
+                         phone_number: phone.value,
+                         payment_token: "",
+                         installments: 1,
+                         // installments e a quantidade de parcelas do cartão
+                         "billing_address": {
+                           "street": street.value,
+                           "number": number.value,
+                           "neighborhood": district.value,
+                           "zipcode": zipcode.value,
+                           "city": city.value,
+                           "complement": complement.value,
+                           "state": state.value
+                         }
+                     } : null,
+                   
                 }).then(res => res.data);
 
+                console.log(res);
+
                 if (res?.Buy?.reference_id) {
-                    router.push(`/evento/checkout/buy/${res?.Buy?.reference_id}`);
+                    type == 1 && router.push(`/evento/checkout/buy/${res?.Buy?.reference_id}`);
                 } else {
                     throw new Error('Erro ao realizar compra, tente novamente ou entre em contato.');
                 }
@@ -152,6 +183,23 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
             setError(error.message);
         } finally {
             setLoading(false);
+        }
+    }
+
+    const findAddress = async () => {
+        try {
+            const res = await axios.get(`https://viacep.com.br/ws/${maskNumber(zipcode.value)}/json/`).then(res => res.data);
+            if (res) {
+                { res.localidade && city.setValue(res.localidade) }
+                { res.bairro && district.setValue(res.bairro) }
+                { res.uf && state.setValue(res.uf) }
+                { res.logradouro && route.setValue(res.logradouro) }
+                setAddressValid(true);
+            } else {
+                setAddressValid(false);
+            }
+        } catch (error) {
+
         }
     }
 
@@ -282,50 +330,54 @@ export function CheckoutContent({ params, selectedTickets, event, expiredAt }: {
                             <div className="flex flex-col gap-6 p-4">
                                 <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4">
                                     <div className="col-span-2 flex">
-                                        <InputText title="Nome impresso no cartão" placeholder="Insira o nome impresso no cartão"/>
+                                        <InputText title="Nome impresso no cartão" placeholder="Insira o nome impresso no cartão" {...name} />
                                     </div>
                                     <div className="col-span-2 flex">
-                                        <InputText title="Número do cartão" placeholder="Insira o número do cartão" />
+                                        <InputText title="Número do cartão" placeholder="Insira o número do cartão" {...numberCard}/>
                                     </div>
                                     <div className="col-span-1 flex">
-                                        <InputText title="Data de validade" placeholder="00/00" />
+                                        <InputText title="Data de validade" placeholder="00/00" {...expiredCard} />
                                     </div>
                                     <div className="col-span-1 flex">
-                                        <InputText title="Código de segurança" placeholder="000" />
+                                        <InputText title="Código de segurança" placeholder="000" {...codeCard} />
                                     </div>
                                 </div>
                                 <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 border-t pt-4">
                                     <div className="col-span-2 flex">
-                                        <InputText title="Email" placeholder="Insira seu email" />
+                                        <InputText title="Email" placeholder="Insira seu email" {...email} />
                                     </div>
                                     <div className="col-span-2 flex">
-                                        <InputText title="Cpf" placeholder="Insira seu CPF" />
+                                        <InputText title="Cpf" placeholder="Insira seu CPF" {...cpf} />
                                     </div>
                                     <div className="col-span-1 flex">
-                                        <InputText title="Telefone" placeholder="(00) 00000-0000" />
+                                        <InputText title="Telefone" placeholder="(00) 00000-0000" {...phone} />
                                     </div>
                                     <div className="col-span-1 flex">
-                                        <InputText title="Data Nascimento" type="date" />
+                                        <InputText title="Data Nascimento" type="date" {...birth} />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-4">
                                     <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 border-t pt-4">
                                         <div className="col-span-1 flex">
-                                            <InputText title="Cep" placeholder="00000-000" />
+                                            <InputText title="Cep" placeholder="00000-000" {...zipcode} onBlur={findAddress} />
                                         </div>
                                     </div>
-                                    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4">
-                                        <InputText title="Estado" placeholder="00000-000" />
-                                        <InputText title="Cidade" placeholder="00000-000" />
-                                        <InputText title="Bairro" placeholder="00000-000" />
-                                    </div>
-                                    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
-                                        <InputText title="Rua" placeholder="00000-000" />
-                                        <InputText title="Complemento" placeholder="00000-000" />
-                                    </div>
-                                    <div className="flex flex-col lg:grid lg:grid-cols-6 gap-4">
-                                        <InputText title="Número" placeholder="" />
-                                    </div>
+                                    {addressValid &&
+                                        <>
+                                            <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4">
+                                                <InputText title="Estado" {...state} />
+                                                <InputText title="Cidade" {...city} />
+                                                <InputText title="Bairro" {...district} />
+                                            </div>
+                                            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
+                                                <InputText title="Rua" {...route} />
+                                                <InputText title="Complemento" />
+                                            </div>
+                                            <div className="flex flex-col lg:grid lg:grid-cols-6 gap-4">
+                                                <InputText title="Número" placeholder="" />
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </div>}

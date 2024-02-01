@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { maskCep, maskNumberCard, maskPhone, maskUserName, maskCpf, maskPrice, maskNumber, maskCnpj } from "../helpers/mask";
+import { maskCep, maskNumberCard, maskPhone, maskUserName, maskCpf, maskPrice, maskNumber, maskCnpj, maskCodeCard, maskExpiredCard } from "../helpers/mask";
 
 const types = {
     phone: {
@@ -21,9 +21,19 @@ const types = {
         message: 'Perfil do instagram inválido'
     },
     numberCard: {
-        regex: /^$/,
+        regex: /^/,
         mask: maskNumberCard,
         message: 'Número do cartão inválido'
+    },
+    expiredCard: {
+        regex: /^/,
+        mask: maskExpiredCard,
+        message: 'Data inválido'
+    },
+    codeCard: {
+        regex: /^/,
+        mask: maskCodeCard,
+        message: 'Código inválido'
     },
     cep: {
         regex: /^/,

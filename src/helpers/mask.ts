@@ -18,6 +18,10 @@ export const maskUserName = (value: string) => {
 
 export const maskNumberCard = (value: string) => VMasker.toPattern(value, "9999 9999 9999 9999");
 
+export const maskExpiredCard = (value: string) => VMasker.toPattern(value, "99/99");
+
+export const maskCodeCard = (value: string) => VMasker.toPattern(value, "999");
+
 export const maskCep = (value: string) => VMasker.toPattern(value, "99999-999");
 
 export const maskCpf = (value: string) => VMasker.toPattern(value, "999.999.999-99");

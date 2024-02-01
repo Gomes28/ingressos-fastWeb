@@ -10,7 +10,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     loading?: boolean;
 }
 
-export function ButtonPrimary({title, full, Icon, loading, ...options}: Props) {
+export function ButtonPrimary({ title, full, Icon, loading, ...options }: Props) {
     return (
         <button className={`
             ${full ? 'w-full' : 'w-fit'}
@@ -18,8 +18,11 @@ export function ButtonPrimary({title, full, Icon, loading, ...options}: Props) {
             bg-primary hover:bg-primary-hover active:bg-primary-active
             disabled:opacity-40 
             flex items-center justify-center gap-2
-        `} disabled={loading || options.disabled} {...options}>
-            {loading && <LoadingSvg color={'#fff'} show={loading}/>}
+        `}
+            disabled={loading || options.disabled}
+            {...options}
+        >
+            {loading && <LoadingSvg color={'#fff'} show={loading} />}
             {!loading && Icon && <span className="text-xl text-white"><Icon /></span>}
             {!loading && title}
         </button>
